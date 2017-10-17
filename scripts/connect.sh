@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Defaults
-config_file=~/.grbl-pyboard.json
+config_file=~/.pyboard-conf.json
 
 
 function config_file_error() {
