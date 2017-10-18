@@ -9,6 +9,11 @@ selfish, I know, but I hope you get something out of it.
 
 # Target Content
 
+As I gather content, I'll put it here.
+
+Then, as I format it as a presentation (link above), I'll delete these sections.
+Ultimately this entire _Target Content_ section will be removed... that's my process.
+
 ## What is MicroPython
 
 `MicroPython` is a low level OS, with Python interpreter for the following microcontrollers:
