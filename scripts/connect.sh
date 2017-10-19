@@ -27,4 +27,4 @@ device=$(utils/pyboard.py -s ${serialnum})
 echo "Connecting to pyboard:"
 echo "    serial number: ${serialnum}"
 echo "    device:        ${device}"
-picocom ${device}
+cu -l ${device}

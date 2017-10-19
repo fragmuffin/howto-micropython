@@ -30,24 +30,17 @@
 
     <!-- Optional - CSS SVG Icons (Font Awesome) -->
     <link rel="stylesheet" type='text/css' media='all' href="static/css/svg-icons.css">
+    <link rel="stylesheet" href="static/fa/css/font-awesome.min.css">
 
     <!-- SOCIAL CARDS (ADD YOUR INFO) -->
 
     <!-- FACEBOOK -->
-    <meta property="og:url" content="http://your-url.com/"> <!-- YOUR URL -->
+    <meta property="og:url" content="https://github.com/fragmuffin"> <!-- YOUR URL -->
     <meta property="og:type" content="article">
-    <meta property="og:title" content="WebSlides — Making HTML Presentations Easy"> <!-- EDIT -->
-    <meta property="og:description" content="WebSlides is about telling stories beautifully. Just the essential features. Good karma."> <!-- EDIT -->
-    <meta property="og:updated_time" content="2017-01-04T17:20:50"> <!-- EDIT -->
-    <meta property="og:image" content="static/images/share-webslides.jpg"> <!-- EDIT -->
-
-    <!-- TWITTER -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@webslides"> <!-- EDIT -->
-    <meta name="twitter:creator" content="@jlantunez"> <!-- EDIT -->
-    <meta name="twitter:title" content="WebSlides — Making HTML Presentations Easy"> <!-- EDIT -->
-    <meta name="twitter:description" content="WebSlides is about good karma. Just essential features. 120+ free slides ready to use."> <!-- EDIT -->
-    <meta name="twitter:image" content="static/images/share-webslides.jpg"> <!-- EDIT -->
+    <meta property="og:title" content="How to MicroPython"> <!-- EDIT -->
+    <meta property="og:description" content="My experiences using MicroPython"> <!-- EDIT -->
+    <meta property="og:updated_time" content="2017-10-19T17:00:00"> <!-- EDIT -->
+    <meta property="og:image" content="static/images/pyboard/v1.1_diag.png"> <!-- EDIT -->
 
     <!-- FAVICONS -->
     <link rel="shortcut icon" sizes="16x16" href="static/images/favicons/favicon.png">
@@ -119,7 +112,7 @@
         <section class="bg-black">
         	<span class="background dark" style="background-image:url('https://source.unsplash.com/OqtafYT5kTw/')"></span>
         	<div class="wrap aligncenter">
-      		  <h1><strong>How to <code>MicroPython</code></strong></h1>
+      		  <h1 class="text-landing">How to MicroPython</h1>
             <img class="size-20" src="static/images/logos/micropython-logo.svg" />
         	</div>
         </section>
@@ -131,14 +124,14 @@
                 <img src="static/images/pyboard/v1.0_top.png" />
               </div>
               <div class="column">
-                <h4>
+                <h2>
                   <!--
                   <svg class="fa-code">
                     <use xlink:href="#fa-code"></use>
                   </svg>
                   -->
-                  <strong>Content</strong>
-                </h4>
+                  Content
+                </h2>
                 <p>In this presentation we'll talk about:</p>
                 <ul class="description">
                   <li>
@@ -178,26 +171,338 @@
           </div>
         </section>
 
-        <section>
+        <section class="bg-black">
           <div class="wrap">
-
-<pre class="prettyprint lang-py zoomIn">
->>> if True == False:
-...     print("yeah, you shouldn't be seeing this")
-... else:
-...     print("hello world")
-hello world
-</pre>
+            <h1>What <i>is</i> MicroPython?</h1>
+            <hr>
+            <blockquote class="text-quote">
+              <p>
+                MicroPython is a lean and efficient implementation of the Python 3
+                programming language that includes a small subset of the Python
+                standard library and is optimised to run on microcontrollers and
+                in constrained environments.
+              </p>
+              <p><cite><a href="https://micropython.org/">MicroPython website</a>.</cite></p>
+            </blockquote>
           </div>
         </section>
+
+        <section class="bg-black">
+          <div class="wrap aligncenter">
+            <h1 class="text-landing">Getting Started</h1>
+          </div>
+        </section>
+
+        <section>
+          <div class="wrap">
+            <h1 class="aligncenter">Hardware</h1>
+            <ul class="flexblock plans blink">
+              <li>
+                <a href="https://store.micropython.org/store/" title="MicroPython Store">
+                  <h2>pyboard</h2>
+                  <div class="grid">
+                    <div class="column">
+                      <img src="static/images/pyboard/v1.1_diag.png" />
+                      &nbsp;
+                      <span class="button">Store</span>
+                    </div>
+                    <div class="column">
+                      <ul>
+                        <li>
+                          <svg class="fa-check">
+                            <use xlink:href="#fa-check"></use>
+                          </svg>
+                          <strong>SD Card</strong> socket
+                        </li>
+                        <li>
+                          <svg class="fa-check">
+                            <use xlink:href="#fa-check"></use>
+                          </svg>
+                          <strong>USB</strong> socket
+                        </li>
+                        <li>
+                          <svg class="fa-times">
+                            <use xlink:href="#fa-times"></use>
+                          </svg>
+                          <strong>WiFi</strong> built in
+                        </li>
+                        <li>
+                          <svg class="fa-check">
+                            <use xlink:href="#fa-check"></use>
+                          </svg>
+                          <strong>Accelerometer</strong>
+                        </li>
+                        <li>
+                          <svg class="fa-times">
+                            <use xlink:href="#fa-times"></use>
+                          </svg>
+                          <strong>Smaller</strong> uC
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="https://pycom.io/product/wipy/" title="WiPy Store">
+                  <h2>WiPy</h2>
+                  <div class="grid">
+                    <div class="column">
+                      <img src="static/images/pyboard/wipy_side.png" />
+                      &nbsp;
+                      <span class="button">Store</span>
+                    </div>
+                    <div class="column">
+                      <ul>
+                        <li>
+                          <svg class="fa-times">
+                            <use xlink:href="#fa-times"></use>
+                          </svg>
+                          <strong>SD Card</strong> socket
+                        </li>
+                        <li>
+                          <svg class="fa-times">
+                            <use xlink:href="#fa-times"></use>
+                          </svg>
+                          <strong>USB</strong> socket
+                        </li>
+                        <li>
+                          <svg class="fa-check">
+                            <use xlink:href="#fa-check"></use>
+                          </svg>
+                          <strong>WiFi</strong> built in
+                        </li>
+                        <li>
+                          <svg class="fa-times">
+                            <use xlink:href="#fa-times"></use>
+                          </svg>
+                          <strong>Accelerometer</strong>
+                        </li>
+                        <li>
+                          <svg class="fa-check">
+                            <use xlink:href="#fa-check"></use>
+                          </svg>
+                          <strong>Larger</strong> uC
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- .end .wrap -->
+        </section>
+
+        <section>
+          <div class="wrap size-50">
+            <div class="flex-content">
+              <h3 class="aligncenter">Powering Up</h3>
+              <ul class="flexblock specs">
+                <li>
+                  <div>
+                    <img src="static/images/usb.png" />
+                    <h2>USB</h2>
+                    Also provides serial connection
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <svg class="fa-plug">
+                      <use xlink:href="#fa-plug"></use>
+                    </svg>
+                    <h2>Power Supply</h2>
+                    3.5V - 10V
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <svg class="fa-battery-full">
+                      <use xlink:href="#fa-battery-full"></use>
+                    </svg>
+                    <h2>Battery</h2>
+                    3.5V - 10V
+                  </div>
+                </li>
+              <ul>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="wrap">
+            <h1 class="aligncenter">Connecting to a <code>REPL</code></h1>
+            <div class="grid">
+              <div class="column flex-content">
+                <p>
+                  A Read Evaluate Print Loop (REPL) is an excelent way to test
+                  your code, and to learn.
+                </p>
+                <p>
+                  Via the REPL you can issue Python commands directly via a serial
+                  terminal (or WiFi) to the microcontroller's Python interpreter.
+                </p>
+                <p>
+                  Connection methods vary for different Operating Systems, to learn more
+                  follow
+                  <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/tutorial/repl.html">
+                    <svg class="fa-link">
+                      <use xlink:href="#fa-link"></use>
+                    </svg>
+                    this REPL Tutorial
+                  </a>
+                </p>
+              </div>
+              <div class="column">
+                <p>
+                  For me, I'll be using Linux (ubuntu) and <code>cu</code>
+                </p>
+<pre class="prettyprint lang-bash">
+$ cu -l /dev/ttyACM0
+Connected.
+>>>
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-black">
+          <div class="wrap aligncenter">
+            <h1 class="text-landing">
+              The Basics
+            </h1>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/5LbgyDmRu9s?rel=0" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </section>
+
+        <section>
+          <h1 class="aligncenter">File System</h1>
+          <div class="wrap">
+            <div class="grid">
+              <div class="column">
+                <div class="text-intro">
+                  The pyboard has the following files stored by default in flash
+                </div>
+<pre>
+/flash/
+    README.txt
+    boot.py
+    main.py
+    pybcdc.inf
+/sd/
+    (sd card's files)
+</pre>
+                <div class="text-intro">
+                  (more about these files later)
+                </div>
+              </div>
+              <div class="column">
+                <div class="text-intro">
+                  The <code>os</code> module can be used to view and manipulate them
+                </div>
+<pre class="prettyprint lang-python">
+>>> import os
+>>> os.listdir('/')
+['flash', 'sd']
+>>> os.getcwd()
+'/flash'
+>>> os.listdir('.')
+['main.py', 'pybcdc.inf', 'README.txt', 'boot.py']
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1 class="aligncenter">Hot Mounting SD Card</h1>
+          <div class="wrap size-50">
+              <div class="text-intro">
+                The SD Card can be mounted without a reset
+              </div>
+<pre class="prettyprint lang-python">
+>>> import os, pyb
+>>> os.umount('/sd')
+>>> os.listdir('/')
+['flash']
+>>> os.mount(pyb.SD, '/sd')
+>>> os.listdir('/')
+['flash', 'sd']
+</pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1 class="aligncenter">LEDs</h1>
+          <div class="wrap">
+            <div class="grid sm">
+              <div class="column">
+                <div class="text-intro">
+                  <p>
+                    The pyboard has 4 Light Emitting Diodes (LEDs)
+                  </p>
+                  <ul class="description">
+                    <li>
+                      <svg class="fa-circle" color="red">
+                        <use xlink:href="#fa-circle"></use>
+                      </svg>
+                      red
+                    </li>
+                    <li>
+                      <svg class="fa-circle" color="green">
+                        <use xlink:href="#fa-circle"></use>
+                      </svg>
+                      green
+                    </li>
+                    <li>
+                      <svg class="fa-circle" color="yellow">
+                        <use xlink:href="#fa-circle"></use>
+                      </svg>
+                      yellow
+                    </li>
+                    <li>
+                      <svg class="fa-circle" color="blue">
+                        <use xlink:href="#fa-circle"></use>
+                      </svg>
+                      blue
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="column">
+<pre class="prettyprint lang-python">
+import pyb
+
+red_led = pyb.LED(1)
+green_led = pyb.LED(2)
+yellow_led = pyb.LED(3)
+blue_led = pyb.LED(4)
+
+# Basic controlls
+red_led.on()
+red_led.off()
+red_led.toggle()
+red_led.toggle()
+
+# LED's 3 & 4 have intensity control
+yellow_led.intensity(0xff)  # same as on()
+yellow_led.intensity(0x00)  # same as off()
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
 
         <section class="bg-black">
           <!--
         	<span class="background dark" style="background-image:url('https://source.unsplash.com/8xAA0f9yQnE/')"></span>
           -->
-        	<div class="wrap aligncenter">
-      		  <h1><strong>Questions?</strong></h1>
-        	</div>
+          <div class="wrap aligncenter">
+            <h1 class="text-landing">Questions?</h1>
+          </div>
         </section>
 
         <section class="bg-black slide-bottom">
