@@ -295,9 +295,15 @@
         </section>
 
         <section>
+          <div class="wrap">
+        	  <img src="static/images/pyboard/v1.1_pinout.jpg" />
+          </div>
+        </section>
+
+        <section>
           <div class="wrap size-50">
             <div class="flex-content">
-              <h3 class="aligncenter">Powering Up</h3>
+              <h1 class="aligncenter">Powering Up</h1>
               <ul class="flexblock specs">
                 <li>
                   <div>
@@ -360,6 +366,8 @@
 <pre class="prettyprint lang-bash">
 $ cu -l /dev/ttyACM0
 Connected.
+MicroPython v1.9.2 on 2017-08-23; PYBv1.1 with STM32F405RG
+Type "help()" for more information.
 >>>
 </pre>
               </div>
@@ -416,26 +424,7 @@ Connected.
         </section>
 
         <section>
-          <h1 class="aligncenter">Hot Mounting SD Card</h1>
-          <div class="wrap size-50">
-              <div class="text-intro">
-                The SD Card can be mounted without a reset
-              </div>
-<pre class="prettyprint lang-python">
->>> import os, pyb
->>> os.umount('/sd')
->>> os.listdir('/')
-['flash']
->>> os.mount(pyb.SD, '/sd')
->>> os.listdir('/')
-['flash', 'sd']
-</pre>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h1 class="aligncenter">LEDs</h1>
+          <h1 class="aligncenter">pyboard LEDs</h1>
           <div class="wrap">
             <div class="grid sm">
               <div class="column">
@@ -460,13 +449,13 @@ Connected.
                       <svg class="fa-circle" color="yellow">
                         <use xlink:href="#fa-circle"></use>
                       </svg>
-                      yellow
+                      yellow (pwm)
                     </li>
                     <li>
                       <svg class="fa-circle" color="blue">
                         <use xlink:href="#fa-circle"></use>
                       </svg>
-                      blue
+                      blue (pwm)
                     </li>
                   </ul>
                 </div>
@@ -475,10 +464,10 @@ Connected.
 <pre class="prettyprint lang-python">
 import pyb
 
-red_led = pyb.LED(1)
-green_led = pyb.LED(2)
-yellow_led = pyb.LED(3)
-blue_led = pyb.LED(4)
+red_led = pyb.LED(1)     # pin A13
+green_led = pyb.LED(2)   # pin A14
+yellow_led = pyb.LED(3)  # pin A15
+blue_led = pyb.LED(4)    # pin B4
 
 # Basic controlls
 red_led.on()
@@ -489,6 +478,312 @@ red_led.toggle()
 # LED's 3 & 4 have intensity control
 yellow_led.intensity(0xff)  # same as on()
 yellow_led.intensity(0x00)  # same as off()
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1 class="aligncenter">Digital Outputs</h1>
+          <div class="wrap">
+            <div class="grid sm">
+              <div class="column">
+                <div class="text-intro">
+                  <p>
+                    Pins can be accessed via a numer a few different names,
+                    depending on the hardware it's running on.
+                  </p>
+                  <p>
+                    This code performs the same actions on the red LED in
+                    the previous slide.
+                  </p>
+                </div>
+              </div>
+              <div class="column">
+<pre class="prettyprint lang-python">
+import machine
+
+# Both yield the same pin instance
+pin = machine.Pin('A13', machine.Pin.OUT)
+pin = machine.Pin('LED_RED', machine.Pin.OUT)
+pin.names()  # ['A13', 'LED_RED']  shows alternatives
+
+# Changing pin's state
+pin.high()  # or: pin.on()
+pin.low()  # or: pin.off()
+print(pin.value())  # prints 0
+pin.value(1 - pin.value())  # toggles pin
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1 class="aligncenter">Digital Inputs</h1>
+          <div class="wrap">
+            <div class="grid sm">
+              <div class="column">
+                <div class="text-intro">
+                  <p>
+                    Input pins are instantiated in much the same way as outputs.
+                  </p>
+                </div>
+              </div>
+              <div class="column">
+<pre class="prettyprint lang-python">
+import machine
+
+# Pin connected to pyboard's Switch
+pin = machine.Pin('SW')
+pin.names()  # ['B3', 'X17', 'SW']  alternatives
+
+# The switch connects the B3 pin to GND when pressed
+pin.value()  # 0 when pressed
+             # 1 when not pressed
+
+# Combining what we know, we can make the button
+# switch on the red LED
+import time
+led = machine.Pin('LED_RED', machine.Pin.OUT)
+while True:
+    time.sleep(0.05)
+    led.value(1 - pin.value())
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1 class="aligncenter">Input Pull-Up/Down Resistors</h1>
+          <div class="wrap">
+            <div class="grid sm">
+              <div class="column">
+                <div class="text-intro">
+                  <p>
+                    Inputs can be pulled up or down, or floating.<br/>
+                  </p>
+                  <p>
+                    <h4>Pull Up or Down?</h4>
+                    The pin should be <i>pulled</i> in the opposite direction
+                    to the switch connected to it.
+                  </p>
+                  <p>
+                    <i>For Example:</i><br/>
+                    An input connected to a switch connecting that input to the
+                    <code>V+</code> rail should be pulled down.<br/>
+                    Because the switch, when closed, will pull the input
+                    voltage high.
+                  </p>
+                </div>
+              </div>
+              <div class="column">
+<pre class="prettyprint lang-python">
+import time
+import machine  # no, not a time-machine
+
+# These 2 initialize the pin in the same way
+pin = machine.Pin('SW')
+pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_UP)
+
+# Trying variations...
+def show_pin(p):
+    # When run in REPL, pressing Ctrl+C will break this loop
+    while True:
+        time.sleep(0.1)
+        print("pin is: %s" % ("HIGH" if p.value() else "LOW"))
+
+# Pull DOWN instead
+pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_DOWN)
+show_pin(pin)  # Press the USR button, what happens?
+
+# Leave pin floating
+pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_NONE)
+show_pin(pin)  # Press the USR button, what happens?
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-black">
+          <div class="wrap aligncenter">
+            <h1 class="text-landing">
+              The (Less) Basic
+            </h1>
+          </div>
+        </section>
+
+        <section>
+          <h1 class="aligncenter">Hot Mounting SD Card</h1>
+          <div class="wrap size-50">
+              <div class="text-intro">
+                The SD Card can be mounted without a reset
+              </div>
+<pre class="prettyprint lang-python">
+>>> import os, pyb
+>>> os.umount('/sd')
+>>> os.listdir('/')
+['flash']
+>>> os.mount(pyb.SD, '/sd')
+>>> os.listdir('/')
+['flash', 'sd']
+</pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="wrap">
+            <div class="aligncenter">
+              <h1>Output PWM</h1>
+              <div class="text-intro">
+                <svg class="fa-exclamation-triangle">
+                  <use xlink:href="#fa-exclamation-triangle"></use>
+                </svg>
+                pyboard specific implementation
+              </div>
+            </div>
+            <div class="grid">
+              <div class="column">
+                <div class="text-intro">
+                  <p>
+                    PWM has not been standardized across MicroPython ports yet
+                    so this is quite hacky for now.
+                  </p>
+                  <p>
+                    <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#pwm-pulse-width-modulation">
+                      <svg class="fa-link">
+                        <use xlink:href="#fa-link"></use>
+                      </svg>
+                      quick reference for pyboard
+                    </a>
+                  </p>
+                  <p>
+                    This code does the same thing as the <code>intensity()</code>
+                    call for LEDs.<br/>
+                    The same code can be used to move a servo motor on another pin.
+                  </p>
+                </div>
+              </div>
+              <div class="column">
+<pre class="prettyprint lang-python">
+import machine
+import pyb
+
+pin = machine.Pin('LED_BLUE')
+timer = pyb.Timer(3, freq=1000)
+channel = tim.channel(1, pyb.Timer.PWM, pin=pin)
+
+# Change blue LED's intensity manually
+channel.pulse_width_percent(5)
+channel.pulse_width_percent(50)
+channel.pulse_width_percent(100)
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="wrap">
+            <div class="aligncenter">
+              <h1>External Interrupts</h1>
+              <div class="text-intro">
+                <svg class="fa-exclamation-triangle">
+                  <use xlink:href="#fa-exclamation-triangle"></use>
+                </svg>
+                pyboard specific implementation
+              </div>
+            </div>
+            <div class="grid">
+              <div class="column">
+                <div class="text-intro">
+                  <p>
+                    External Interrupts also aren't standardized across
+                    Micropython ports.
+                  </p>
+                  <p>
+                    This implementation is pyboard specific.
+                  </p>
+                  <p>
+                    <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#external-interrupts">
+                      <svg class="fa-link">
+                        <use xlink:href="#fa-link"></use>
+                      </svg>
+                      quick reference for pyboard
+                    </a>
+                  </p>
+                </div>
+              </div>
+              <div class="column">
+<pre class="prettyprint lang-python">
+import pyb
+import machine
+
+def callback(i):
+    print("intr")
+
+pin = machine.Pin(
+    'SW', machine.Pin.IN, machine.Pin.PULL_UP
+)
+ext = pyb.ExtInt(
+    pin,
+    pyb.ExtInt.IRQ_FALLING,
+    machine.Pin.PULL_UP,
+    callback
+)
+</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="wrap">
+            <div class="aligncenter">
+              <h1>Timer Interrupts</h1>
+              <div class="text-intro">
+                <svg class="fa-exclamation-triangle">
+                  <use xlink:href="#fa-exclamation-triangle"></use>
+                </svg>
+                pyboard specific implementation
+              </div>
+            </div>
+            <div class="grid">
+              <div class="column">
+                <div class="text-intro">
+                  <p>
+                    Timers are also not standardized across MicroPython ports.
+                  </p>
+                  <p>
+                    So again, this is a pyboard specific implementation.
+                  </p>
+                  <p>
+                    <a href="http://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#timers">
+                      <svg class="fa-link">
+                        <use xlink:href="#fa-link"></use>
+                      </svg>
+                      quick reference for pyboard
+                    </a>
+                  </p>
+                </div>
+              </div>
+              <div class="column">
+<pre class="prettyprint lang-python">
+import machine
+import pyb
+
+led = machine.Pin('LED_RED')
+def toggle_led_cb(tim):
+    led.value(1 - led.value())
+
+timer = pyb.Timer(1, freq=1000)
+timer.counter() # get counter value
+timer.freq(0.5) # 0.5 Hz
+timer.callback(toggle_led_cb)
 </pre>
               </div>
             </div>
