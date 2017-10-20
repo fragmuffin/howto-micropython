@@ -1,0 +1,709 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>How to MicroPython</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <!-- <link rel="stylesheet" href="css/theme/black.css"> -->
+        <link rel="stylesheet" href="css/theme/night.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+        <!-- Manual style tweaks -->
+        <style>
+            /* Columns */
+            /* ref: https://stackoverflow.com/questions/30861845/how-to-use-two-column-layout-with-reveal-js#answer-44392145 */
+            .columns {
+                display: flex;
+            }
+            .col {
+                flex: 1;
+            }
+
+            /* Colors */
+            .text-red {
+                color: #f00
+            }
+            .text-green {
+                color: #0f0
+            }
+            .text-yellow {
+                color: #ff0
+            }
+            .text-blue {
+                color: #00f
+            }
+        </style>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <!-- =================== INTRODUCTION =================== -->
+                <section>
+                    <section>
+                        <h1>MicroPython</h1>
+                        <h3>Python for micro-controllers.</h3>
+                        <div class="stretch">
+                            <img class="plain" src="images/logo/micropython.svg" />
+                        </div>
+
+                        <!-- Side notes shown when pressing 's' -->
+                        <aside data-markdown class="notes">
+                            # Remember to bring
+                            - laptop + power supply
+                            - pyboard
+                            - USB cable (micro usb)
+                            - micro SD card (pre-loaded with [pyboard-sd](https://github.com/fragmuffin/howto-micropython/tree/master/pyboard-sd))
+                            - potentiometer (with connectors to pyboard)
+
+                            TODO: finish things list
+                            - Touch LCD
+                            - LCD connections
+
+                            # Hotkeys
+
+                            - `[space]` navigates through each slide
+                            - `[esc]` zoom out
+                            - `[Alt+Click]` zoom to element
+
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Content</h2>
+                        <ul>
+                            <li>Hardware</li>
+                            <li>Getting Started</li>
+                            <li>File System</li>
+                            <li>Outputs</li>
+                            <li>Inputs</li>
+                            <li>Interrupts</li>
+                            <li>Your Script</li>
+                            <li>LDC Interface</li>
+                        </ul>
+                    </section>
+                </section>
+
+
+                <!-- =================== HARDWARE =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>Hardware</h1>
+                    </section>
+
+                    <section>
+                        <div class="columns">
+                            <div class="col">
+                                <h3>pyboard</h3>
+                                <img class="plain" src="images/pyboard/v1.1_diag.png" />
+                            </div>
+                            <div class="col">
+                                <h3>WiPy</h3>
+                                <img class="plain" src="images/wipy/side.png" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Peripherals</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><a href="https://www.adafruit.com/product/2390">pyboard</a></th>
+                                    <th><a href="https://pycom.io/product/wipy/">WiPy</a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SD card socket</td>
+                                    <td>Yes</td>
+                                    <td>No</td>
+                                </tr>
+                                <tr>
+                                    <td>USB socket</td>
+                                    <td>Yes</td>
+                                    <td>No</td>
+                                </tr>
+                                <tr>
+                                    <td>WiFi built-in</td>
+                                    <td>No</td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td>Accelerometer</td>
+                                    <td>Yes</td>
+                                    <td>No</td>
+                                </tr>
+                                <tr>
+                                    <td>Processor Power</td>
+                                    <td>Less</td>
+                                    <td>More</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section>
+                        <h2>Micro-Controller</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><a href="https://www.adafruit.com/product/2390">pyboard</a></th>
+                                    <th><a href="https://pycom.io/product/wipy/">WiPy</a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Model</td>
+                                    <td><a href="http://www.st.com/en/microcontrollers/stm32f405rg.html">STM32F405RG</a></td>
+                                    <td><a href="http://espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">ESP32</a></td>
+                                </tr>
+                                <tr>
+                                    <td>ROM</td>
+                                    <td>1MB</td>
+                                    <td>4MB</td>
+                                </tr>
+                                <tr>
+                                    <td>RAM</td>
+                                    <td>192kB</td>
+                                    <td>512kB</td>
+                                </tr>
+                                <tr>
+                                    <td>Cores</td>
+                                    <td>1</td>
+                                    <td>2*</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ul>
+                            <li>1 core dedicated to networking</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>This Presentation</h2>
+                        <div class="fragment_ fade-in">
+                            <div class="columns">
+                                <div class="col">
+                                    <p>
+                                        For the rest of this presentation I'll be
+                                        using the <code>pyboard</code> v1.1.
+                                    </p>
+                                    <p>
+                                        Note: there's more than just the pyboard
+                                        and WiPy out there. Anything with
+                                        a processor <a href="https://micropython.org/download">listed here</a>
+                                    </p>
+                                </div>
+                                <div class="col">
+                                    <h3>pyboard v1.1</h3>
+                                    <img class="plain" width="70%" src="images/pyboard/v1.0_top.png" />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <a href="images/pyboard/v1.1_pinout.jpg">
+                            <img class="plain" src="images/pyboard/v1.1_pinout.jpg" />
+                        </a>
+                    </section>
+
+                </section>
+
+                <!-- =================== GETTING STARTED =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>Getting Started</h1>
+                    </section>
+
+                    <section>
+                        <iframe width="1024" height="576" src="https://www.youtube.com/embed/5LbgyDmRu9s?rel=0" frameborder="0" allowfullscreen></iframe>
+
+                        <aside data-markdown class="notes">
+                            **Video Length:** 9:40
+
+                            ## Key Moments
+
+                            * [0:39](https://youtu.be/5LbgyDmRu9s?t=0m54s) - pyboard specs
+                            * [0:54](https://youtu.be/5LbgyDmRu9s?t=0m54s) - REPL
+                            * [2:15](https://youtu.be/5LbgyDmRu9s?t=2m15s) - file system
+                            * [3:00](https://youtu.be/5LbgyDmRu9s?t=3m00s) - LEDs and Switch
+                            * [3:32](https://youtu.be/5LbgyDmRu9s?t=3m32s) - running script from host
+                            * [6:32](https://youtu.be/5LbgyDmRu9s?t=6m32s) - copy script to flash
+                            * [7:32](https://youtu.be/5LbgyDmRu9s?t=7m32s) - copy script to SD
+                            * [8:43](https://youtu.be/5LbgyDmRu9s?t=8m43s) - running from batt
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Powering Up</h2>
+                        <ul>
+                            <li><b>USB</b> - also provides serial</li>
+                            <li><b>Power Supply</b> - 3.5 to 10V</li>
+                            <li><b>Battery</b> - 3.5 to 10V</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Connect to REPL</h2>
+                        <p>
+                            Read Evaluate Print Loop (REPL)
+                        </p>
+                        <pre><code class="hljs" data-trim contenteditable>
+$ cu -l /dev/ttyACM0
+Connected.
+MicroPython v1.9.2 on 2017-08-23; PYBv1.1 with STM32F405RG
+Type "help()" for more information.
+>>>
+                        </code></pre>
+                        <p>
+                            for more detail: <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/tutorial/repl.html">REPL tutorial</a>
+                        </p>
+                    </section>
+
+                </section>
+
+                <!-- =================== FILE SYSTEM =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>File System</h1>
+                    </section>
+
+                    <section>
+                        <h2>Out of the Box</h2>
+                        The pyboard's flash contains the following
+                        <pre><code class="hljs" data-trim contenteditable>
+                            flash/
+                                README.txt
+                                boot.py
+                                main.py
+                                pybcdc.inf
+                            sd/
+                                (sd card content)
+                        </code></pre>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/pyboard-flash">
+                            copy of <code>/flash</code> folder
+                        </a>
+                    </section>
+
+                    <section>
+                        <h2>Browse with Python</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            >>> import os
+                            >>> os.listdir('/')
+                            ['flash', 'sd']
+                            >>> os.getcwd()
+                            '/flash'
+                            >>> os.listdir('.')
+                            ['main.py', 'pybcdc.inf', 'README.txt', 'boot.py']
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Hot mount SD Card</h2>
+                        The SD card can be mounted after boot.
+                        <pre><code class="hljs" data-trim contenteditable>
+                            >>> import os, pyb
+                            >>> os.umount('/sd')
+                            >>> os.listdir('/')
+                            ['flash']
+                            >>> os.mount(pyb.SD, '/sd')
+                            >>> os.listdir('/')
+                            ['flash', 'sd']
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Hot mount SD Card</h2>
+                        Raises <code>OSError</code> on failure...
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import os, pyb
+                            try:
+                                os.mount(pyb.SD, '/sd')
+                                print("Successfully mounted SD card")
+                            except OSError:
+                                print("Failed to mount SD card")
+                        </code></pre>
+                    </section>
+
+                </section>
+
+                <!-- =================== OUTPUTS =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>Outputs</h1>
+                    </section>
+
+                    <section>
+                        <h2>pyboard's LEDs</h2>
+                        The pyboard has 4 LEDs onboard.
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Colour</td>
+                                    <td>#</td>
+                                    <td>Pin</td>
+                                    <td>Pin Alias</td>
+                                    <td>PWM</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="text-red">red</span></td>
+                                    <td>1</td>
+                                    <td><code>A13</code></td>
+                                    <td><code>LED_RED</code></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-green">green</span></td>
+                                    <td>2</td>
+                                    <td><code>A14</code></td>
+                                    <td><code>LED_GREEN</code></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-yellow">yellow</span></td>
+                                    <td>3</td>
+                                    <td><code>A15</code></td>
+                                    <td><code>LED_YELLOW</code></td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">blue</span></td>
+                                    <td>4</td>
+                                    <td><code>B4</code></td>
+                                    <td><code>LED_BLUE</code></td>
+                                    <td>Yes</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section>
+                        <h3><code>pyb.LED()</code></h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import pyb
+
+                            red_led = pyb.LED(1)
+                            yellow_led = pyb.LED(3)
+
+                            # Basic controlls
+                            red_led.on()
+                            red_led.off()
+                            red_led.toggle()
+
+                            # Yellow and Blue have intensity control
+                            yellow_led.intensity(0xff)  # same as on()
+                            yellow_led.intensity(0x00)  # same as off()
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Digital Outputs</h2>
+                        Let's control the <span class="text-red">red</span>
+                        LED directly.
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import machine
+
+                            # Both yield the same pin instance
+                            pin = machine.Pin('A13', machine.Pin.OUT)
+                            pin = machine.Pin('LED_RED', machine.Pin.OUT)
+                            pin.names()  # ['A13', 'LED_RED']  shows alternatives
+
+                            # Changing pin's state
+                            pin.high()  # or: pin.on()
+                            pin.low()  # or: pin.off()
+                            print(pin.value())  # prints 0
+                            pin.value(1 - pin.value())  # toggles pin
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>PWM Output</h2>
+                        Let's control the <span class="text-blue">blue</span>
+                        LED's intensity directly.
+
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import machine
+                            import pyb
+
+                            pin = machine.Pin('LED_BLUE')
+                            timer = pyb.Timer(3, freq=1000)
+                            channel = tim.channel(1, pyb.Timer.PWM, pin=pin)
+
+                            # Change blue LED's intensity manually
+                            channel.pulse_width_percent(5)
+                            channel.pulse_width_percent(50)
+                            channel.pulse_width_percent(100)
+                        </code></pre>
+
+                        <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#pwm-pulse-width-modulation">
+                            quick reference for pyboard
+                        </a>
+                    </section>
+
+                    <section>
+                        <h2>Analog Output</h2>
+                        TODO
+                    </section>
+
+                </section>
+
+                <!-- =================== INPUTS =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>Inputs</h1>
+                    </section>
+
+                    <section>
+                        <h3><code>pyb.Switch()</code></h3>
+                        The pyboard has a switch marked <code>USR</code> on board.
+                        <div class="columns">
+                            <div class="col">
+                                <img class="plain" src="images/circuits/switch.png" />
+                            </div>
+                            <div class="col">
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    import pyb
+
+                                    switch = pyb.Switch()
+
+                                    switch.value()
+                                    # True when pressed
+                                    # False when not pressed
+                                </code></pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Digital Inputs</h2>
+                        For the same circuit, still using <code>SW</code> pin.
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import machine
+
+                            # Pin connected to pyboard's Switch
+                            pin = machine.Pin('SW')
+                            pin.names()  # ['B3', 'X17', 'SW']  alternatives
+
+                            # The switch connects the B3 pin to GND when pressed
+                            pin.value()  # 0 when pressed
+                                         # 1 when not pressed
+                        </code></pre>
+                        Notice the <code>pyb</code> module is not used.
+                    </section>
+
+                    <section>
+                        <h2>Input Pull Up/Down</h2>
+                        Inputs can be pulled up, down, or left to float.
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import machine
+
+                            pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_UP)
+                            pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_DOWN)
+                            pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_NONE)
+
+                            # These 2 initialize the pin in the same way
+                            pin = machine.Pin('SW')  # defaults for SW are...
+                            pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_UP)
+
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Analog Inputs</h2>
+                        <div class="columns">
+                            <div class="col">
+                                <img class="plain" src="images/circuits/adc.png" />
+                            </div>
+                            <div class="col">
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    import machine
+                                    import time
+                                    import pyb
+
+                                    pin = machine.Pin('X19')
+                                    adc = pyb.ADC(pin)
+                                    adc.read()  # reads value, 0-4095
+
+                                    while True:
+                                        time.sleep(0.1)
+                                        value_ratio = adc.read() / 4095
+                                        print('#' * int(40 * value_ratio))
+                                </code></pre>
+                            </div>
+                        </div>
+                    </section>
+
+                </section>
+
+                <!-- =================== INTERRUPTS =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>Interrupts</h1>
+                    </section>
+
+                    <section>
+                        <h2>External Interrupt</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import pyb
+                            import machine
+
+                            def callback(i):
+                                print("intr")
+
+                            pin = machine.Pin(
+                                'SW', machine.Pin.IN, machine.Pin.PULL_UP
+                            )
+                            ext = pyb.ExtInt(
+                                pin,
+                                pyb.ExtInt.IRQ_FALLING,
+                                machine.Pin.PULL_UP,
+                                callback
+                            )
+                        </code></pre>
+                        <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#external-interrupts">
+                            pyboard quick-references
+                        </a>
+                    </section>
+
+                    <section>
+                        <h2>Timer Interrupt</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import machine
+                            import pyb
+
+                            led = machine.Pin('LED_RED')
+                            def toggle_led_cb(tim):
+                                led.value(1 - led.value())
+
+                            timer = pyb.Timer(1, freq=1000)
+                            timer.counter() # get counter value
+                            timer.freq(2) # 2 Hz
+                            timer.callback(toggle_led_cb)
+                        </code></pre>
+                        <a href="http://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#timers">
+                            pyboard quick-references
+                        </a>
+                    </section>
+                </section>
+
+                <!-- =================== RUNNING SCRIPTS =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>Your Script</h1>
+                    </section>
+
+                    <section>
+                        <h2>Boot Order</h2>
+                        <ol>
+                            <li>SD Card - <code>/sd/main.py</code></li>
+                            <li>Flash - <code>/flash/main.py</code></li>
+                        </ol>
+                        <p>
+                            Both can be coppied to via USB Mass Storage.<br/>
+                            The <span class="text-red">red</span> LED will illuminate while
+                            the device is busy.
+                        </p>
+                        <p>
+                            Programs on SD cards alows a sort of nostalgic <i>cartridge</i> system.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2>Import Path</h2>
+                        Defaults are...
+                        <pre><code class="hljs" data-trim contenteditable>
+                            >>> import sys
+                            >>> sys.path
+                            ['', '/sd', '/sd/lib', '/flash', '/flash/lib']
+                        </code></pre>
+                        an excellent guide is <a href="http://wiki.micropython.org/Importing-Modules">here</a>
+                    </section>
+
+                    <section>
+                        <h2>Installing from PyPI</h2>
+                        <ol>
+                            <li>Download <code>.tar.gz</code> file</li>
+                            <li>Extract to one of the <code>lib</code> folders</li>
+                        </ol>
+
+                        <aside data-markdown class="notes">
+                            ## Examples to Install
+                            - [micropython-curses.ascii](https://pypi.python.org/pypi/micropython-curses.ascii)
+                            - [micropython-collections.defaultdict](https://pypi.python.org/pypi/micropython-collections.defaultdict)
+                            - [micropython-fnmatch](https://pypi.python.org/pypi/micropython-fnmatch)
+                            - [micropython-itertools](https://pypi.python.org/pypi/micropython-itertools)
+                        </aside>
+
+                    </section>
+
+                </section>
+
+                <!-- =================== RUNNING SCRIPTS =================== -->
+                <section>
+                    <section data-background="#28306a">
+                        <h1>LCD Interface</h1>
+                    </section>
+
+
+                </section>
+
+                <!-- =================== END =================== -->
+
+                <section style="text-align: right;">
+                    <h1>&nbsp;</h1><!-- FIXME: placement is an embarrassing hack -->
+                    <h3>Thank You.</h3>
+                    <p>
+                        By <a title="Visit me on Github" href="https://github.com/fragmuffin">Peter Boin</a>.
+                    </p>
+                    <p>
+                        Made with <a title="reveal.js" href="https://github.com/hakimel/reveal.js">reveal.js</a>.
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+
+    </body>
+</html>
