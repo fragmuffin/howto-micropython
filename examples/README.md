@@ -2,6 +2,14 @@
 
 These examples exhibit some or all functionality shown in the slides.
 
+
+## Examples are for pyboard
+
+These examples have only been tested on `pyboard` v1.1.
+
+Furthermore: any examples that `import pyb` probably won't work on anything else.
+
+
 ## Running an example
 
 Copy the entire contents of an example folder onto a blank micro SD card.
