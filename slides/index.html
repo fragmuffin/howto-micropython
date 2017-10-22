@@ -96,14 +96,16 @@
                                     also: <a href="https://github.com/fragmuffin/howto-micropython">the github repo'</a>
                                 </div>
                                 <script type="text/javascript">
+                                    var qrcode_url_static = "https://fragmuffin.github.io/howto-micropython"
+
                                     // Get presentation URL
-                                    var qrcode_url = window.location.href;
+                                    //var qrcode_url = window.location.href;
+                                    var qrcode_url = qrcode_url_static; // keep it simple
                                     if (/^(localhost|192\.168\.1\.1|)$/.test(location.hostname)) {
                                         // host is localhost, just force a static uri
-                                        qrcode_url = "https://fragmuffin.github.io/howto-micropython";
+                                        qrcode_url = qrcode_url_static;
                                         console.log("host is local, forced qrcode to: " + qrcode_url);
                                     }
-                                    var link_url = qrcode_url;
 
                                     // Generate QR Code
                                     var qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -118,8 +120,8 @@
 
                                     // Add text
                                     var link_el = document.getElementById("link_text");
-                                    link_el.textContent = link_url;
-                                    link_el.href = link_url;
+                                    link_el.textContent = qrcode_url;
+                                    link_el.href = qrcode_url;
                                 </script>
                             </div>
                             <div class="col">

@@ -1,6 +1,14 @@
 from colors import *
+from utils import font_height
 
 class Button:
+
+    color_line = WHITE
+    color_fill = GREY_20
+    text_color = WHITE
+
+    font_index = 1
+    font_scale = 0
 
     def __init__(self, lcd, x1, y1, x2, y2, label="Button"):
         self.lcd = lcd
@@ -10,9 +18,6 @@ class Button:
         self.y2 = y2
         self.label = label
 
-        self.color_line = lcd.rgb(*WHITE)
-        self.color_fill = lcd.rgb(*GREY_20)
-
         self.render()
 
     @property
@@ -20,10 +25,28 @@ class Button:
         return (self.x1, self.y1, self.x2 - self.x1, self.y2 - self.y1)
 
     def render(self):
+        # Box
         self.lcd.set_pen(self.color_line, self.color_fill)
         xywh = self.xywh
         self.lcd.rect_interior(*xywh)
         self.lcd.rect(*xywh)
+
+        # Label, center justified
+        self.lcd.set_font(
+            self.font_index,
+            scale=self.font_scale,
+            trans=1,
+        )
+        self.lcd.set_text_color(self.text_color, BLACK)
+        height = font_height(self.font_index, self.font_scale)
+        label_width = height * len(self.label)
+        center_x = (self.x1 + self.x2) / 2
+        center_y = (self.y1 + self.y2) / 2
+        self.lcd.set_pos(
+            int(center_x - (label_width / 2)),
+            int(center_y - (height / 2))
+        )
+        self.lcd.write(self.label)
 
     def is_pressed(self, touching, x, y):
         """
