@@ -14,10 +14,7 @@ def font_height(index, scale=0):
 
 
 # ------------ LCD Utilities ------------
-
-
 class RestoreFrameContext():
-
     def __init__(self, lcd):
         self.lcd = lcd
         self.buffer = None
@@ -34,4 +31,13 @@ class RestoreFrameContext():
 
 
 def restore_framebuffer(lcd):
+    """
+    Record and restore LCD's frame buffer after context block.
+    example usage:
+        with restore_framebuffer(lcd):
+            lcd.erase()
+            # repurpose display for a while
+            time.sleep(1)
+    :param lcd: lcd160cr.LCD160CR instance
+    """
     return RestoreFrameContext(lcd)

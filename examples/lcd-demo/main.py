@@ -76,6 +76,12 @@ try:
                 # wait for applause
                 time.sleep(5)
         time.sleep(0.05)
+
 except KeyboardInterrupt:
     # User has connected a REPL and pressed Ctrl+C
-    pass
+    # Clear screen
+    lcd.set_pen(RED, BLACK)
+    lcd.erase()
+    # Draw an X (clear indication that we should be back into the REPL)
+    lcd.line(0, 0, lcd.w-1, lcd.h-1)
+    lcd.line(0, lcd.h-1, lcd.w-1, 0)
