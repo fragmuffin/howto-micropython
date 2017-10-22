@@ -22,6 +22,9 @@
             document.getElementsByTagName( 'head' )[0].appendChild( link );
         </script>
 
+        <!-- QR Codes -->
+        <script type="text/javascript" src="qrcodejs/qrcode.js"></script>
+
         <!-- Manual style tweaks -->
         <style>
             /* Columns */
@@ -33,7 +36,7 @@
                 flex: 1;
             }
 
-            /* Colors */
+            /* Colours */
             .text-red {
                 color: #f00
             }
@@ -83,23 +86,62 @@
                     </section>
 
                     <section>
-                        <h2>Content</h2>
-                        <ul>
-                            <li>Hardware</li>
-                            <li>Getting Started</li>
-                            <li>File System</li>
-                            <li>Outputs</li>
-                            <li>Inputs</li>
-                            <li>Interrupts</li>
-                            <li>Your Script</li>
-                            <li>LDC Interface</li>
-                        </ul>
+                        <h2>Contents</h2>
+                        <div class="columns">
+                            <div class="col">
+                                Follow along...
+                                <div id="qrcode" style="background-color: #fff; padding: 1px 1px 1px 1px; display: inline-block" align="center"></div>
+                                <div style="font-size:0.5em">
+                                    <a id="link_text"></a><br/>
+                                    also: <a href="https://github.com/fragmuffin/howto-micropython">the github repo'</a>
+                                </div>
+                                <script type="text/javascript">
+                                    // Get presentation URL
+                                    var qrcode_url = window.location.href;
+                                    if (/^(localhost|192\.168\.1\.1|)$/.test(location.hostname)) {
+                                        // host is localhost, just force a static uri
+                                        qrcode_url = "https://fragmuffin.github.io/howto-micropython";
+                                        console.log("host is local, forced qrcode to: " + qrcode_url);
+                                    }
+                                    var link_url = qrcode_url;
+
+                                    // Generate QR Code
+                                    var qrcode = new QRCode(document.getElementById("qrcode"), {
+                                        text: qrcode_url,
+                                        width: 350,
+                                        height: 350
+                                    });
+
+                                    // Alter generated image
+                                    var img_el = qrcode._el.childNodes[1];
+                                    img_el.classList.add("plain"); // remove border
+
+                                    // Add text
+                                    var link_el = document.getElementById("link_text");
+                                    link_el.textContent = link_url;
+                                    link_el.href = link_url;
+                                </script>
+                            </div>
+                            <div class="col">
+                                <ul>
+                                    <li><a href="#/hardware">Hardware</a></li>
+                                    <li><a href="#/getting_started">Getting Started</a></li>
+                                    <li><a href="#/file_system">File System</a></li>
+                                    <li><a href="#/outputs">Outputs</a></li>
+                                    <li><a href="#/inputs">Inputs</a></li>
+                                    <li><a href="#/interrupts">Interrupts</a></li>
+                                    <li><a href="#/your_script">Your Script</a></li>
+                                    <li><a href="#/debugging">Debugging</a></li>
+                                    <li><a href="#/lcd_interface">LDC Interface</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </section>
                 </section>
 
 
                 <!-- =================== HARDWARE =================== -->
-                <section>
+                <section id="hardware">
                     <section data-background="#28306a">
                         <h1>Hardware</h1>
                     </section>
@@ -131,12 +173,12 @@
                                 <tr>
                                     <td>SD card socket</td>
                                     <td>Yes</td>
-                                    <td>No</td>
+                                    <td>No*</td>
                                 </tr>
                                 <tr>
                                     <td>USB socket</td>
                                     <td>Yes</td>
-                                    <td>No</td>
+                                    <td>No*</td>
                                 </tr>
                                 <tr>
                                     <td>WiFi built-in</td>
@@ -155,6 +197,9 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div style="font-size:0.7em">
+                            * - available via <a href="https://pycom.io/product/expansion-board-2-0/">expansion board</a>
+                        </div>
                     </section>
 
                     <section>
@@ -227,7 +272,7 @@
                 </section>
 
                 <!-- =================== GETTING STARTED =================== -->
-                <section>
+                <section id="getting_started">
                     <section data-background="#28306a">
                         <h1>Getting Started</h1>
                     </section>
@@ -260,17 +305,19 @@
                         </ul>
                     </section>
 
-                    <section>
+                    <section id="connect_to_repl">
                         <h2>Connect to REPL</h2>
                         <p>
                             Read Evaluate Print Loop (REPL)
                         </p>
                         <pre><code class="hljs" data-trim contenteditable>
-$ cu -l /dev/ttyACM0
-Connected.
-MicroPython v1.9.2 on 2017-08-23; PYBv1.1 with STM32F405RG
-Type "help()" for more information.
->>>
+                            $ cu -l /dev/ttyACM0
+                            Connected.
+                            MicroPython v1.9.2 on 2017-08-23; PYBv1.1 with STM32F405RG
+                            Type "help()" for more information.
+                            >>> import os
+                            >>> os.uname().version
+                            'v1.9.2 on 2017-08-23'
                         </code></pre>
                         <p>
                             for more detail: <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/tutorial/repl.html">REPL tutorial</a>
@@ -280,7 +327,7 @@ Type "help()" for more information.
                 </section>
 
                 <!-- =================== FILE SYSTEM =================== -->
-                <section>
+                <section id="file_system">
                     <section data-background="#28306a">
                         <h1>File System</h1>
                     </section>
@@ -345,7 +392,7 @@ Type "help()" for more information.
                 </section>
 
                 <!-- =================== OUTPUTS =================== -->
-                <section>
+                <section id="outputs">
                     <section data-background="#28306a">
                         <h1>Outputs</h1>
                     </section>
@@ -467,7 +514,7 @@ Type "help()" for more information.
                 </section>
 
                 <!-- =================== INPUTS =================== -->
-                <section>
+                <section id="inputs">
                     <section data-background="#28306a">
                         <h1>Inputs</h1>
                     </section>
@@ -480,6 +527,7 @@ Type "help()" for more information.
                                 <img class="plain" src="images/circuits/switch.png" />
                             </div>
                             <div class="col">
+                                <br/>
                                 <pre><code class="hljs" data-trim contenteditable>
                                     import pyb
 
@@ -555,7 +603,7 @@ Type "help()" for more information.
                 </section>
 
                 <!-- =================== INTERRUPTS =================== -->
-                <section>
+                <section id="interrupts">
                     <section data-background="#28306a">
                         <h1>Interrupts</h1>
                     </section>
@@ -606,7 +654,7 @@ Type "help()" for more information.
                 </section>
 
                 <!-- =================== RUNNING SCRIPTS =================== -->
-                <section>
+                <section id="your_script">
                     <section data-background="#28306a">
                         <h1>Your Script</h1>
                     </section>
@@ -657,26 +705,167 @@ Type "help()" for more information.
 
                 </section>
 
-                <!-- =================== RUNNING SCRIPTS =================== -->
-                <section>
+                <!-- =================== DEBUGGING =================== -->
+                <section id="debugging">
+                    <section data-background="#28306a">
+                        <h1>Debugging</h1>
+                    </section>
+
+                    <section>
+                        <h2>+ Bug</h2>
+                        Let's run a <code>main.py</code> with a bug.
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import pyb
+
+                            led = pyb.LED(1)  # Red LED
+                            sw = pyb.Switch()
+
+                            while True:
+                                time.sleep(0.05)
+                                if sw.value():
+                                    led.on()
+                                else:
+                                    led.off()
+                        </code></pre>
+                        <p>
+                            <span class="fragment">You want a hint?</span>
+                            <span class="fragment">I don't have time.</span>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2>Use a REPL</h2>
+                        Read output from <code>MicroPython</code> interpreter.
+                        <ol>
+                            <li><a href="#/connect_to_repl">connect the board to a <code>REPL</code></a></li>
+                            <li><i>soft</i> reset the board with <code>Ctrl+D</code></li>
+                            <li>read the output</li>
+                        </ol>
+                    </section>
+
+                    <section>
+                        <h2>The Result</h2>
+                        <code>Ctrl+D</code> is pressed...
+                        <pre><code class="hljs" data-trim contenteditable>
+                            >>>
+                            PYB: sync filesystems
+                            PYB: soft reboot
+                            Traceback (most recent call last):
+                              File "main.py", line 7, in &lt;module>
+                            NameError: name 'time' is not defined
+                            MicroPython v1.9.2 on 2017-08-23; PYBv1.1 with STM32F405RG
+                            Type "help()" for more information.
+                            >>>
+                        </code></pre>
+                        We see it doesn't know what <code>time</code> is on line 7.
+                    </section>
+
+                    <section>
+                        <h2>Debugging with <code>pdb?</code></h2>
+                        <p>
+                            Not yet, sadly.
+                        </p>
+                        <p>
+                            Watch
+                            <a href="https://github.com/micropython/micropython-lib/tree/master/pdb">this space</a>
+                            , and
+                            <a href="https://github.com/micropython/micropython/issues/3009">#3009</a>
+                            .
+                        </p>
+                    </section>
+                </section>
+
+                <!-- =================== LCD INTERFACE =================== -->
+                <section id="lcd_interface">
                     <section data-background="#28306a">
                         <h1>LCD Interface</h1>
                     </section>
 
+                    <section>
+                        <h2>LCD160CRv1.0</h2>
+                        <div class="columns">
+                            <div class="col">
+                                <img class="plain" src="images/lcd/diag.png" />
+                            </div>
+                            <div class="col">
+                                <br/>
+                                <ul>
+                                    <li>Resolution: 160 x 128</li>
+                                    <li>Colour: 16-bit</li>
+                                    <li>Screen refresh: 30fps</li>
+                                    <li>Resistive Touch</li>
+                                    <li><a href="https://store.micropython.org/#/products/LCD160CRv1_0">store + references</a></li>
+                                    <li><a href="https://youtu.be/OOz9U_YdstM">demo video</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Wiring</h2>
+                        pyboard Right &nbsp; &gt;&gt; &nbsp; LCD Left
+                        <div class="columns">
+                            <div class="col">
+                                <img class="plain" src="images/pyboard/v1.0_top.png" />
+                            </div>
+                            <div class="col">
+                                <img class="plain" src="images/lcd/top.png" />
+                            </div>
+                        </div>
+
+                        <aside data-markdown class="notes">
+                            **There are 4 wiring options**
+
+                            - `X`
+                            - `Y`
+                            - `XY` - shown in this slide
+                            - YX
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Run Test</h2>
+                        The <code>lcd160cr</code> &amp; <code>lcd160cr_test</code>
+                        mocules are included with pyboard's MicroPython build.
+
+                        <pre><code class="hljs" data-trim contenteditable>
+                            >>> # Runs built in test
+                            >>> from lcd160cr_test import (
+                            ...     test_features,
+                            ...     test_mandel,
+                            ... )
+                            >>> test_features('XY')
+                            >>> test_mandel('XY')
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Tests results</h2>
+                        <div class="columns">
+                            <div class="col">
+                                Features<br/>
+                                <img class="plain" width="60%" src="images/lcd/test_features.jpg" />
+                            </div>
+                            <div class="col">
+                                <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandel</a><br/>
+                                <img class="plain" width="60%" src="images/lcd/test_mandel.jpg" />
+                            </div>
+                        </div>
+                    </section>
 
                 </section>
 
                 <!-- =================== END =================== -->
-
-                <section style="text-align: right;">
-                    <h1>&nbsp;</h1><!-- FIXME: placement is an embarrassing hack -->
-                    <h3>Thank You.</h3>
-                    <p>
-                        By <a title="Visit me on Github" href="https://github.com/fragmuffin">Peter Boin</a>.
-                    </p>
-                    <p>
-                        Made with <a title="reveal.js" href="https://github.com/hakimel/reveal.js">reveal.js</a>.
-                    </p>
+                <section style="width:90%;height:80%" data-background="#000000">
+                    <div class="full" style="bottom:0px;right:0px;position:absolute;text-align:left;">
+                        <h3>Thank You.</h3>
+                        <p>
+                            By <a title="Visit me on Github" href="https://github.com/fragmuffin">Peter Boin</a>.
+                        </p>
+                        <p>
+                            Made with <a title="reveal.js" href="https://github.com/hakimel/reveal.js">reveal.js</a>.
+                        </p>
+                    </div>
                 </section>
             </div>
         </div>

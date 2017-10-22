@@ -41,8 +41,8 @@ config file: `~/.pyboard-conf.json`
 
 ## `connect.sh`
 
-used on it's own, to connect to a console
+Connects to a REPL.
 
 ```
-./connect.sh
+./repl.sh
 ```
