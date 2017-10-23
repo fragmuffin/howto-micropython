@@ -16,15 +16,6 @@ config_file=~/.pyboard-conf.json
 # Parameter(s)
 source_dir=$1
 
-# Verify source folder
-if [ -z "${source_dir}" ] || [ ! -d ${source_dir} ] ; then
-    echo "ERROR: '${source_dir}' is not a directory"
-    exit 1
-fi
-if [ ! -f "${source_dir}/main.py" ] ; then
-    echo "ERROR: '${source_dir}/main.py' does not exist"
-    exit 1
-fi
 
 # Get pyboard device info
 serialnum=$(cat ${config_file} | jq -r '.serial_number')
@@ -58,6 +49,18 @@ if [ $volume_size -lt 20000 ] ; then
     echo "Disk size ${volume_size} too small, is the SD card connected?"
     exit 1
 fi
+
+
+# Verify source folder
+if [ -z "${source_dir}" ] || [ ! -d ${source_dir} ] ; then
+    echo "ERROR: '${source_dir}' is not a directory"
+    exit 1
+fi
+if [ ! -f "${source_dir}/main.py" ] ; then
+    echo "ERROR: '${source_dir}/main.py' does not exist"
+    exit 1
+fi
+
 
 # Sync files
 rsync -aIvzh --delete "${source_dir}/" "${mount_point}/"
