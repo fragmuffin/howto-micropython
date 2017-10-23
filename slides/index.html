@@ -831,13 +831,15 @@
                         mocules are included with pyboard's MicroPython build.
 
                         <pre><code class="hljs" data-trim contenteditable>
-                            >>> # Runs built in test
-                            >>> from lcd160cr_test import (
-                            ...     test_features,
-                            ...     test_mandel,
-                            ... )
-                            >>> test_features('XY')
-                            >>> test_mandel('XY')
+                            import lcd160cr
+                            import lcd160cr_test
+
+                            # Create LCD object
+                            lcd = lcd160cr.LCD160CR('XY')
+
+                            # Run built-in test on lcd
+                            lcd160cr_test.test_features(lcd)
+                            lcd160cr_test.test_mandel(lcd)
                         </code></pre>
                     </section>
 
@@ -846,13 +848,158 @@
                         <div class="columns">
                             <div class="col">
                                 Features<br/>
-                                <img class="plain" width="60%" src="images/lcd/test_features.jpg" />
+                                <img class="plain" width="60%" src="images/lcd/test_features.png" style="image-rendering: pixelated;" />
                             </div>
                             <div class="col">
                                 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandel</a><br/>
-                                <img class="plain" width="60%" src="images/lcd/test_mandel.jpg" />
+                                <img class="plain" width="60%" src="images/lcd/test_mandel.png" style="image-rendering: pixelated;" />
                             </div>
                         </div>
+                    </section>
+
+                    <section>
+                        <h2>Lines</h2>
+                        <div class="columns">
+                            <div class="col">
+                                Code:
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    import lcd160cr
+                                    lcd = lcd160cr.LCD160CR('XY')
+
+                                    # white on black
+                                    lcd.set_pen(0xffff, 0)
+                                    lcd.erase()  # clear screen
+
+                                    # Draw a line
+                                    lcd.line(0, 0, lcd.w, lcd.h)
+
+
+                                </code></pre>
+                            </div>
+                            <div class="col">
+                                Result<br/>
+                                <img class="plain" width="60%" src="images/lcd/draw_line.png" style="image-rendering: pixelated;" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Poly Lines</h2>
+                        <div class="columns">
+                            <div class="col">
+                                Code:
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    from math import sin, cos, pi
+                                    x = int(lcd.w / 2)
+                                    y = int(lcd.h / 2)
+
+                                    points = []
+                                    for i in range(6):
+                                        a = i * (0.8 * pi)
+                                        points += [
+                                            x + int(60 * sin(a)),
+                                            y + int(60 * cos(a))
+                                        ]
+
+                                    lcd.poly_line(
+                                        bytearray(points)
+                                    )
+                                </code></pre>
+                            </div>
+                            <div class="col">
+                                Result<br/>
+                                <img class="plain" width="60%" src="images/lcd/draw_polyline.png" style="image-rendering: pixelated;" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Boxes</h2>
+                        <div class="columns">
+                            <div class="col">
+                                Code:
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    # Set some colours
+                                    BLUE = lcd.rgb(0, 0, 255)
+                                    YELLOW = lcd.rgb(255, 255, 0)
+                                    GREY_20 = lcd.rgb(51, 51, 51)
+
+                                    lcd.set_pen(0, GREY_20)
+                                    lcd.erase()
+
+                                    lcd.set_pen(BLUE, YELLOW)
+                                    lcd.rect(10, 10, 100, 70)
+                                </code></pre>
+                            </div>
+                            <div class="col">
+                                Result<br/>
+                                <img class="plain" width="60%" src="images/lcd/draw_rect.png" style="image-rendering: pixelated;" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Text</h2>
+                        <div class="columns">
+                            <div class="col">
+                                Code:
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    # Set some colours
+                                    WHITE = lcd.rgb(255, 255, 255)
+                                    GREEN = lcd.rgb(0, 255, 0)
+                                    lcd.set_pen(WHITE, 0)
+                                    lcd.set_text_color(GREEN, 0)
+
+                                    for i in [1, 2, 3, 4]:
+                                        # normal
+                                        lcd.set_pos(10, i * 25)
+                                        lcd.set_font(i, scale=0)
+                                        lcd.write('Font%i' % i)
+                                        # scaled up by 1
+                                        lcd.set_pos(80, i * 25)
+                                        lcd.set_font(i, scale=1)
+                                        lcd.write('f%i' % i)
+                                </code></pre>
+                            </div>
+                            <div class="col">
+                                Result<br/>
+                                <img class="plain" width="60%" src="images/lcd/draw_text.png" style="image-rendering: pixelated;" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>JPG</h2>
+                        <div class="columns">
+                            <div class="col">
+                                Code:
+                                <p style="font-size:0.5em">
+                                    Pre-process <code>jpg</code>:
+                                </p>
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    sudo apt install libjpeg-progs
+                                    jpegtran orig.jpg > photo.jpg
+                                </code></pre>
+                                <p style="font-size:0.5em">
+                                    pyboard code:
+                                </p>
+                                <pre><code class="hljs" data-trim contenteditable>
+                                    fname = '/sd/images/photo.jpg'
+                                    with open(fname, 'rb') as f:
+                                        buf = bytearray(f.read())
+                                    lcd.set_pos(0, 0)
+                                    lcd.jpeg(buf)
+                                </code></pre>
+                            </div>
+                            <div class="col">
+                                Result<br/>
+                                <img class="plain" width="60%" src="images/lcd/draw_jpg.png" style="image-rendering: pixelated;" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>And More</h2>
                     </section>
 
                 </section>

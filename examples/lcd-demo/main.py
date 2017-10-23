@@ -1,4 +1,5 @@
 import lcd160cr
+import lcd160cr_test
 import pyb
 import time
 
@@ -9,6 +10,7 @@ from utils import restore_framebuffer
 lcd = lcd160cr.LCD160CR('XY')
 lcd.set_pen(WHITE, BLACK)
 lcd.erase()
+
 
 # ------ Create Button instances -------
 PAD = 4
@@ -32,6 +34,10 @@ btn_red = create_button(0, 3, "Red")
 
 # Other fun stuff
 btn_jpg = create_button(1, 0, "JPG")
+#btn_accel = create_button(1, 1, "Accel")
+btn_features = create_button(1, 2, "Features")
+btn_mandel = create_button(1, 3, "Mandel")
+
 
 # ------ LED utilities -------
 led_red = pyb.LED(1)
@@ -45,18 +51,19 @@ def set_led(led, value):
     else:
         led.off()
 
-# ------ Displaying a JPEG -------
-def demo_show_jpg():
-    lcd.set_pen(WHITE, BLACK)
-    lcd.erase()
 
-    with open('/sd/images/uc-moorabbin.jpg', 'rb') as f:
-        f.seek(0xffff)  # max size
-        buf = bytearray(f.tell())
-        f.seek(0)
-        f.readinto(buf)
+# ------ DEMO: Displaying a JPEG -------
+def demo_show_jpg():
+    with open('/sd/images/photo.jpg', 'rb') as f:
+        buf = bytearray(f.read())
     lcd.set_pos(0, 0)
     lcd.jpeg(buf)
+
+
+# ------ DEMO: Graph Accelerometer Values -------
+def demo_graph_accel(duration=None):
+    # TODO
+    time.sleep(duration)
 
 
 try:
@@ -75,6 +82,20 @@ try:
                 demo_show_jpg()
                 # wait for applause
                 time.sleep(5)
+
+        #elif btn_accel.is_pressed(*touch_info):
+        #    with restore_framebuffer(lcd):
+        #        demo_graph_accel(10)
+
+        elif btn_features.is_pressed(*touch_info):
+            with restore_framebuffer(lcd):
+                lcd160cr_test.test_features(lcd)
+
+        elif btn_mandel.is_pressed(*touch_info):
+            with restore_framebuffer(lcd):
+                lcd160cr_test.test_mandel(lcd)
+                time.sleep(5)
+
         time.sleep(0.05)
 
 except KeyboardInterrupt:
