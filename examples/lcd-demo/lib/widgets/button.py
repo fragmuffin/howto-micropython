@@ -48,14 +48,21 @@ class Button:
         )
         self.lcd.write(self.label)
 
-    def is_pressed(self, touching, x, y):
+    def is_pressed(self, touching=None, x=0, y=0):
         """
         Return if the button is pressed or not.
-           >>> btn.is_pressed(*btn.lcd.get_touch())
+           >>> btn.is_pressed()  # calls lcd
+        alternatively, for multiple buttons
+           >>> touch = btn.lcd.get_touch()
+           >>> btn1.is_pressed(*touch)
+           >>> btn2.is_pressed(*touch)
+        :param touching: True if lcd is being touched
         :param x: x coordinate
         :param y: y coordinate
         :return: True if button is being pressed, False otherwise
         """
+        if touching is None:
+            (touching, x, y) = self.lcd.get_touch()
         if touching:
             if not (self.y1 < y < self.y2):
                 return False
