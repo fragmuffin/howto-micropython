@@ -41,13 +41,30 @@
                 color: #f00
             }
             .text-green {
-                color: #0f0
+                color: #0f0;
             }
             .text-yellow {
-                color: #ff0
+                color: #ff0;
             }
             .text-blue {
-                color: #00f
+                color: #00f;
+            }
+
+            /* External Link */
+            .prj-link {
+                font-family: monospace !important;
+                font-size: 0.7em !important;
+            }
+
+            .prj-link::before {
+                display: inline-block;
+                width: 1em;
+                height: 1em;
+                margin-right: 0.4em;
+                margin-left: 0.2em;
+                content: "";
+                background: url("images/ext-link.png") no-repeat 0 0;
+                background-size: 100%;
             }
         </style>
     </head>
@@ -348,9 +365,7 @@
                             sd/
                                 (sd card content)
                         </code></pre>
-                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/pyboard-flash">
-                            copy of <code>/flash</code> folder
-                        </a>
+                        copy: <a href="https://github.com/fragmuffin/howto-micropython/tree/master/pyboard-flash" class="prj-link">/flash</a>
                     </section>
 
                     <section>
@@ -464,6 +479,7 @@
                             yellow_led.intensity(0xff)  # same as on()
                             yellow_led.intensity(0x00)  # same as off()
                         </code></pre>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/outputs/pyb-led" class="prj-link">examples/outputs/pyb-led</a>
                     </section>
 
                     <section>
@@ -484,6 +500,7 @@
                             print(pin.value())  # prints 0
                             pin.value(1 - pin.value())  # toggles pin
                         </code></pre>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/outputs/digital" class="prj-link">examples/outputs/digital</a>
                     </section>
 
                     <section>
@@ -504,10 +521,7 @@
                             channel.pulse_width_percent(50)
                             channel.pulse_width_percent(100)
                         </code></pre>
-
-                        <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#pwm-pulse-width-modulation">
-                            quick reference for pyboard
-                        </a>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/outputs/pwm" class="prj-link">examples/outputs/pwm</a>
                     </section>
 
                     <section>
@@ -547,7 +561,7 @@
 
                     <section>
                         <h2>Digital Inputs</h2>
-                        For the same circuit, still using <code>SW</code> pin.
+                        Check the same switch without using <code>pyb</code>
                         <pre><code class="hljs" data-trim contenteditable>
                             import machine
 
@@ -559,7 +573,7 @@
                             pin.value()  # 0 when pressed
                                          # 1 when not pressed
                         </code></pre>
-                        Notice the <code>pyb</code> module is not used.
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/inputs/digital" class="prj-link">examples/inputs/digital</a>
                     </section>
 
                     <section>
@@ -575,8 +589,8 @@
                             # These 2 initialize the pin in the same way
                             pin = machine.Pin('SW')  # defaults for SW are...
                             pin = machine.Pin('SW', machine.Pin.IN, machine.Pin.PULL_UP)
-
                         </code></pre>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/inputs/pull-up-down" class="prj-link">examples/inputs/pull-up-down</a>
                     </section>
 
                     <section>
@@ -602,6 +616,7 @@
                                 </code></pre>
                             </div>
                         </div>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/inputs/analog" class="prj-link">examples/inputs/analog</a>
                     </section>
 
                 </section>
@@ -631,9 +646,7 @@
                                 callback
                             )
                         </code></pre>
-                        <a href="https://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#external-interrupts">
-                            pyboard quick-references
-                        </a>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/interrupts/ext" class="prj-link">examples/interrupts/ext</a>
                     </section>
 
                     <section>
@@ -651,9 +664,7 @@
                             timer.freq(2) # 2 Hz
                             timer.callback(toggle_led_cb)
                         </code></pre>
-                        <a href="http://docs.micropython.org/en/latest/pyboard/pyboard/quickref.html#timers">
-                            pyboard quick-references
-                        </a>
+                        <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/interrupts/timer" class="prj-link">examples/interrupts/timer</a>
                     </section>
                 </section>
 
@@ -717,7 +728,7 @@
 
                     <section>
                         <h2>+ Bug</h2>
-                        Let's run a <code>main.py</code> with a bug.
+                        Let's run a <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/debug" class="prj-link">main.py</a> with a bug.
                         <pre><code class="hljs" data-trim contenteditable>
                             import pyb
 

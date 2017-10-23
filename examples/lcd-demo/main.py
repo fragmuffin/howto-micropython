@@ -85,7 +85,6 @@ try:
             # Display a JPG
             with restore_framebuffer(lcd):
                 demo_show_jpg()
-                # wait for applause
                 time.sleep(5)
 
         #elif btn_accel.is_pressed(*touch_info):
@@ -93,10 +92,12 @@ try:
         #        demo_graph_accel(10)
 
         elif btn_features.is_pressed(*touch_info):
+            # Built-in Test - Features
             with restore_framebuffer(lcd):
                 lcd160cr_test.test_features(lcd)
 
         elif btn_mandel.is_pressed(*touch_info):
+            # Built-in Test - Mandel
             with restore_framebuffer(lcd):
                 lcd160cr_test.test_mandel(lcd)
                 time.sleep(5)
