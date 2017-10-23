@@ -38,6 +38,11 @@ btn_jpg = create_button(1, 0, "JPG")
 btn_features = create_button(1, 2, "Features")
 btn_mandel = create_button(1, 3, "Mandel")
 
+if btn_blue.is_pressed():
+    # Take screenshot
+    # press "Blue" button while booting to take screenshot
+    from utils import screenshot
+    screenshot(lcd, '/sd/screenshots/lcd-demo.raw')
 
 # ------ LED utilities -------
 led_red = pyb.LED(1)
