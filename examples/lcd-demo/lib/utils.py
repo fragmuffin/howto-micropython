@@ -26,10 +26,7 @@ class RestoreFrameContext():
 
     def set_led(self, val):
         if self.led:
-            if val:
-                self.led.intensity(10)
-            else:
-                self.led.off()
+            self.led.intensity(10 if val else 0)
 
     def __enter__(self):
         # save buffer
@@ -57,3 +54,20 @@ def restore_framebuffer(*args, **kwargs):
     :param lcd: lcd160cr.LCD160CR instance
     """
     return RestoreFrameContext(*args, **kwargs)
+
+
+def screenshot(lcd, filename, led=True):
+    # LED stuff
+    led_pin = None
+    if led:
+        led_pin = pyb.LED(3)
+    def set_led(val):
+        if led_pin:
+            led_pin.intensity(10 if val else 0)
+
+    set_led(True)
+    buffer = bytearray(2 * lcd.w * lcd.h)
+    lcd.screen_dump(buffer)
+    with open(filename, 'wb') as fh:
+        fh.write(buffer)
+    set_led(False)
