@@ -128,10 +128,12 @@
                                 <ul>
                                     <li><a href="#/hardware">Hardware</a></li>
                                     <li><a href="#/getting_started">Getting Started</a></li>
-                                    <li><a href="#/file_system">File System</a></li>
-                                    <li><a href="#/outputs">Outputs</a></li>
-                                    <li><a href="#/inputs">Inputs</a></li>
-                                    <li><a href="#/interrupts">Interrupts</a></li>
+                                    <ul>
+                                        <li><a href="#/file_system">File System</a></li>
+                                        <li><a href="#/outputs">Outputs</a></li>
+                                        <li><a href="#/inputs">Inputs</a></li>
+                                        <li><a href="#/interrupts">Interrupts</a></li>
+                                    </ul>
                                     <li><a href="#/your_script">Your Script</a></li>
                                     <li><a href="#/debugging">Debugging</a></li>
                                     <li><a href="#/lcd_interface">LDC Interface</a></li>
@@ -999,7 +1001,28 @@
                     </section>
 
                     <section>
+                        <h2>Resistive Touch</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            (touching, x, y) = lcd.get_touch()
+
+                            # touching: is True or False
+                            # x: int coord of most recent touch
+                            # y: int coord of most recent touch
+                        </code></pre>
+                    </section>
+
+                    <section>
                         <h2>And More</h2>
+                        <ul>
+                            <li>Frame buffering</li>
+                            <li>Window scrolling</li>
+                            <li>Portrait / Landscape coordinates</li>
+                            <li>Backlight brightness</li>
+                            <li>Save settings to flash</li>
+                        </ul>
+                        <p>
+                            Documentation <a href="https://docs.micropython.org/en/latest/pyboard/library/lcd160cr.html">here</a>.
+                        </p>
                     </section>
 
                 </section>
