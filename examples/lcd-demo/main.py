@@ -7,7 +7,11 @@ import widgets
 from colors import *
 from utils import restore_framebuffer
 
-lcd = lcd160cr.LCD160CR('XY')
+try:
+    lcd = lcd160cr.LCD160CR('XY')
+except OSError:
+    # I might have plugged in into the other side
+    lcd = lcd160cr.LCD160CR('YX')
 lcd.set_pen(WHITE, BLACK)
 lcd.erase()
 
