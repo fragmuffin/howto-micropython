@@ -60,11 +60,12 @@
                 display: inline-block;
                 width: 1em;
                 height: 1em;
-                margin-right: 0.4em;
-                margin-left: 0.2em;
+                margin-right: 0.1em;
+                margin-left: 0.1em;
                 content: "";
-                background: url("images/ext-link.png") no-repeat 0 0;
+                background: url("images/micro-sd-card.png") no-repeat 0 0;
                 background-size: 100%;
+                vertical-align: middle;
             }
         </style>
     </head>
@@ -142,7 +143,8 @@
                                 </script>
                             </div>
                             <div class="col">
-                                <ul>
+                                <ul style="font-size:0.9em">
+                                    <li><a href="#/what_is_micropython">What is MicroPython?</a></li>
                                     <li><a href="#/hardware">Hardware</a></li>
                                     <li><a href="#/getting_started">Getting Started</a></li>
                                     <ul>
@@ -157,6 +159,23 @@
                                 </ul>
                             </div>
                         </div>
+                    </section>
+                </section>
+
+                <!-- =================== WHAT IS MICROPYTHON =================== -->
+                <section id="what_is_micropython">
+                    <section data-background="#28306a">
+                        <h1 style="font-size: 3.5em">What is MicroPython?</h1>
+                    </section>
+
+                    <section>
+                        <h3><a href="https://micropython.org/"><img class="plain" src="images/logo/micropython.png" style="vertical-align: middle; margin-right:0.2em" />micropython.org</a></h3>
+                        <blockquote>
+                            &ldquo;MicroPython is a lean and efficient implementation of the Python 3
+                            programming language that includes a small subset of the Python standard
+                            library and is optimised to run on microcontrollers and in constrained
+                            environments.&rdquo;
+                        </blockquote>
                     </section>
                 </section>
 
@@ -707,6 +726,9 @@
                             <li>Download <code>.tar.gz</code> file</li>
                             <li>Extract to one of the <code>lib</code> folders</li>
                         </ol>
+                        <ul>
+                            <li>Download <a href="https://pypi.python.org/pypi/micropython-itertools"><code>itertools</code> from PyPI</a></li>
+                        </ul>
 
                         <aside data-markdown class="notes">
                             ## Examples to Install
@@ -715,7 +737,16 @@
                             - [micropython-fnmatch](https://pypi.python.org/pypi/micropython-fnmatch)
                             - [micropython-itertools](https://pypi.python.org/pypi/micropython-itertools)
                         </aside>
+                    </section>
 
+                    <section>
+                        <h2>For Example...</h2>
+                        Installing <code>itertools</code>.
+                        <ul>
+                            <li>Download <a href="https://pypi.python.org/pypi/micropython-itertools"><code>itertools</code> from PyPI</a></li>
+                            <li>Extract to <code>lib</code> on the sd card</li>
+                            <li>result should look like:<br/><a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/itertools-installed" class="prj-link">examples/itertools-installed</a></li>
+                        </ul>
                     </section>
 
                 </section>
