@@ -1,3 +1,4 @@
+import os
 import lcd160cr
 import lcd160cr_test
 import pyb
@@ -62,8 +63,16 @@ def set_led(led, value):
 
 
 # ------ DEMO: Displaying a JPEG -------
+jpg_idx = 0
+jpg_folder = '/sd/images'
+jpg_list = ["%s/%s" % (jpg_folder, f) for f in os.listdir(jpg_folder) if f.endswith('.jpg')]
 def demo_show_jpg():
-    with open('/sd/images/photo.jpg', 'rb') as f:
+    # Get name from list, and shift index
+    global jpg_idx, jpg_list
+    filename = jpg_list[jpg_idx]
+    jpg_idx = (jpg_idx + 1) % len(jpg_list)
+
+    with open(filename, 'rb') as f:
         buf = bytearray(f.read())
     lcd.set_pos(0, 0)
     lcd.jpeg(buf)
