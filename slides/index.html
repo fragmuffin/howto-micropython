@@ -685,6 +685,46 @@
                         </code></pre>
                         <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/interrupts/timer" class="prj-link">examples/interrupts/timer</a>
                     </section>
+
+                    <section>
+                        <h2>Memory Limitation</h2>
+                        <p>
+                            Interrupt code is run while the heap is locked;<br/>
+                            no memory can be allocated, or de-allocated.
+                        </p>
+                        <ul>
+                            <li><span class="fragment strike"><code>list.append</code> or <code>set.add</code></span></li>
+                            <li><span class="fragment strike"><code>list.pop</code> or <code>set.remove</code></span></li>
+                            <li><span class="fragment strike">function <code>return</code></span></li>
+                            <li><span class="fragment strike">add a key to a <code>dict</code></span></li>
+                            <li>and more</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Scheduling</h2>
+                        <p>
+                            To work around interrupt limits.
+                        </p>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import micropython, machine
+
+                            switch = machine.Pin('SW')
+                            timer = pyb.Timer(1, freq=2)
+
+                            window = []
+                            def populate_window(t):
+                                global window
+                                window = window[-9:] + [switch.value() == 0]
+
+                            timer.callback(populate_window)  # BAD! raises MemoryError
+
+                            def timer_callback(t):
+                                micropython.schedule(populate_window, t)
+                            timer.callback(timer_callback)
+                        </code></pre>
+
+                    </section>
                 </section>
 
                 <!-- =================== RUNNING SCRIPTS =================== -->
@@ -726,9 +766,6 @@
                             <li>Download <code>.tar.gz</code> file</li>
                             <li>Extract to one of the <code>lib</code> folders</li>
                         </ol>
-                        <ul>
-                            <li>Download <a href="https://pypi.python.org/pypi/micropython-itertools"><code>itertools</code> from PyPI</a></li>
-                        </ul>
 
                         <aside data-markdown class="notes">
                             ## Examples to Install
@@ -804,6 +841,21 @@
                             >>>
                         </code></pre>
                         We see it doesn't know what <code>time</code> is on line 7.
+                    </section>
+
+                    <section>
+                        <h2>Debugging Interrupts</h2>
+                        To enable standard exception reporting to a REPL
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import micropython
+                            micropython.alloc_emergency_exception_buf(100)
+                        </code></pre>
+                        see
+                        <a href="http://docs.micropython.org/en/v1.9.2/pyboard/library/micropython.html#micropython.alloc_emergency_exception_buf">
+                            <code>alloc_emergency_exception_buf</code>
+                        </a>
+                        documentation for details.
+
                     </section>
 
                     <section>
