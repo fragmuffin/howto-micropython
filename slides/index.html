@@ -67,6 +67,17 @@
                 background-size: 100%;
                 vertical-align: middle;
             }
+
+            /* QR Code */
+            .qrcode {
+                background-color: #fff;
+                padding: 1px 1px 1px 1px;
+                display: inline-block;
+            }
+
+            .half-size {
+                font-size: 0.5em !important;
+            }
         </style>
     </head>
     <body>
@@ -108,39 +119,11 @@
                         <div class="columns">
                             <div class="col">
                                 Follow along...
-                                <div id="qrcode" style="background-color: #fff; padding: 1px 1px 1px 1px; display: inline-block" align="center"></div>
-                                <div style="font-size:0.5em">
-                                    <a id="link_text"></a><br/>
+                                <div class="qrcode" align="center"></div>
+                                <div class="half-size">
+                                    <a class="qrcode-link"></a><br/>
                                     also: <a href="https://github.com/fragmuffin/howto-micropython">the github repo'</a>
                                 </div>
-                                <script type="text/javascript">
-                                    var qrcode_url_static = "https://fragmuffin.github.io/howto-micropython"
-
-                                    // Get presentation URL
-                                    //var qrcode_url = window.location.href;
-                                    var qrcode_url = qrcode_url_static; // keep it simple
-                                    if (/^(localhost|192\.168\.1\.1|)$/.test(location.hostname)) {
-                                        // host is localhost, just force a static uri
-                                        qrcode_url = qrcode_url_static;
-                                        console.log("host is local, forced qrcode to: " + qrcode_url);
-                                    }
-
-                                    // Generate QR Code
-                                    var qrcode = new QRCode(document.getElementById("qrcode"), {
-                                        text: qrcode_url,
-                                        width: 350,
-                                        height: 350
-                                    });
-
-                                    // Alter generated image
-                                    var img_el = qrcode._el.childNodes[1];
-                                    img_el.classList.add("plain"); // remove border
-
-                                    // Add text
-                                    var link_el = document.getElementById("link_text");
-                                    link_el.textContent = qrcode_url;
-                                    link_el.href = qrcode_url;
-                                </script>
                             </div>
                             <div class="col">
                                 <ul style="font-size:0.9em">
@@ -1122,19 +1105,65 @@
                 </section>
 
                 <!-- =================== END =================== -->
-                <section style="width:90%;height:80%" data-background="#000000">
-                    <div class="full" style="bottom:0px;right:0px;position:absolute;text-align:left;">
-                        <h3>Thank You.</h3>
-                        <p>
-                            By <a title="Visit me on Github" href="https://github.com/fragmuffin">Peter Boin</a>.
-                        </p>
-                        <p>
-                            Made with <a title="reveal.js" href="https://github.com/hakimel/reveal.js">reveal.js</a>.
-                        </p>
+                <section data-background="#000000">
+                    <h2>Thank You</h2>
+                    <div class="columns">
+                        <div class="col">
+                            <div class="qrcode" align="center"></div>
+                            <div class="half-size">
+                                <a class="qrcode-link"></a><br/>
+                                also: <a href="https://github.com/fragmuffin/howto-micropython">the github repo'</a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <br/><br/>
+                            <p>
+                                By <a title="Visit me on Github" href="https://github.com/fragmuffin">Peter Boin</a>.
+                            </p>
+                            <p>
+                                Made with <a title="reveal.js" href="https://github.com/hakimel/reveal.js">reveal.js</a>.
+                            </p>
+                        </div>
                     </div>
                 </section>
             </div>
         </div>
+
+        <!-- QR Codes -->
+        <script type="text/javascript">
+            // Get presentation URL
+            var qrcode_url = "https://fragmuffin.github.io/howto-micropython";
+            if (!/^(localhost|127\.0\.1\.1|)$/.test(location.hostname)) {
+                // host is not localhost, get dynamic URL
+                //keep it simple
+                //qrcode_url = window.location.href;
+                console.log("host is not local, dynamic url: " + window.location.href);
+            }
+
+            // Generate QR Codes : class="qrcode"
+            var qrcode_elements = document.getElementsByClassName('qrcode');
+            for (var i=0; i<qrcode_elements.length; i++) {
+                var qrcode_el = qrcode_elements[i];
+
+                var qrcode = new QRCode(qrcode_el, {
+                    text: qrcode_url,
+                    width: 350,
+                    height: 350
+                });
+
+                // Alter generated image
+                var img_el = qrcode._el.childNodes[1];
+                img_el.classList.add("plain"); // remove border
+            }
+
+            // Add text to links : class="qrcode-link"
+            var qrcode_link_elements = document.getElementsByClassName('qrcode-link');
+            for (var i=0; i<qrcode_link_elements.length; i++) {
+                var link_el = qrcode_link_elements[i];
+                link_el.textContent = qrcode_url;
+                link_el.href = qrcode_url;
+            }
+        </script>
 
         <script src="lib/js/head.min.js"></script>
         <script src="js/reveal.js"></script>
