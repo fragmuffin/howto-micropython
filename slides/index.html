@@ -25,6 +25,10 @@
         <!-- QR Codes -->
         <script type="text/javascript" src="qrcodejs/qrcode.js"></script>
 
+        <!-- WaveDrom: Timing Diagrams-->
+        <script src="http://wavedrom.com/skins/default.js" type="text/javascript"></script>
+        <script src="http://wavedrom.com/wavedrom.min.js" type="text/javascript"></script>
+
         <!-- Manual style tweaks -->
         <style>
             /* Columns */
@@ -78,6 +82,19 @@
             .half-size {
                 font-size: 0.5em !important;
             }
+
+            /* Timing Diagram */
+            .timing-diagram {
+                display: inline-block;
+                width: 100%;
+            }
+
+            .timing-diagram div svg {
+                width: 100%;
+                height: auto;
+                filter: invert(100%);
+            }
+
         </style>
     </head>
     <body>
@@ -1163,6 +1180,10 @@
                 link_el.textContent = qrcode_url;
                 link_el.href = qrcode_url;
             }
+        </script>
+
+        <script>
+            WaveDrom.ProcessAll();
         </script>
 
         <script src="lib/js/head.min.js"></script>
