@@ -645,15 +645,64 @@
                 <section id="comms">
                     <section data-background="#28306a">
                         <h1>Comms</h1>
-                        Communication protocols
+                        Communication<br/>protocols
                     </section>
 
                     <section>
-                        <h2>UART (serial)</h2>
+                        <h2>UART</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            from pyb import UART
+
+                            uart = UART(1)
+                            uart.init(baudrate=9600)
+
+                            uart.write(b'abc')   # send 3 bytes
+                            data = uart.read(3)  # receive 3 bytes
+
+                            uart.deinit()
+                        </code></pre>
                     </section>
 
                     <section>
-                        <h2>Controller Area Network (CAN)</h2>
+                        <h2>Virtual COM Port</h2>
+                        <ul>
+                            <li>UART over USB</li>
+                            <li>No wiring necessary</li>
+                            <li>baudrate can be set much higher<br/>than standard UART</li>
+                        </ul>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            from pyb import USB_VCP
+                            vcp = USB_VCP()
+
+                            vcp.write(b'abc')   # write 3 bytes
+                            data = vcp.recv(3)  # receive 3 bytes
+                        </code></pre>
+                        <aside data-markdown class="notes">
+                            ### Setting baudrate?
+                            Baurdrate is set on the PC side
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>I²C</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            from pyb import I2C
+
+                            i2c = I2C(1)                         # create on bus 1
+                            i2c = I2C(1, I2C.MASTER)             # create as a master
+                            i2c.init(I2C.MASTER, baudrate=20000) # init as a master
+                            i2c.init(I2C.SLAVE, addr=0x42)       # init as a slave
+
+                            i2c.send(b'abc')     # send 3 bytes
+                            i2c.send(0x42)       # send a single byte
+                            data = i2c.recv(3)   # receive 3 bytes
+
+                            i2c.deinit()  # turn off the peripheral
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Controller Area Network (CAN)</h3>
                         <ul>
                             <li>Used in all modern cars</li>
                             <li>Excellent immunity to noise</li>
@@ -685,7 +734,7 @@
                                         {name: '', wave: '01....0', node: '.ab.c.d.'},
                                         //{name: 'timing', wave: '023.4.0', data: ['1', 'bs1', 'bs2']},
                                     ],
-                                    config: {hscale: 1, skin: 'norm'},
+                                    config: {hscale: 1},
                                     edge: [
                                         'a<->b 1',
                                         'b<->c bs1',
@@ -738,6 +787,7 @@
                                 prescaler=prescaler, bs1=bs1, bs2=bs2,
                             )
 
+                            # Transmit
                             can1.send(b'abc', 0x100)
                         </code></pre>
                     </section>
