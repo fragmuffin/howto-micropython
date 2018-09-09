@@ -25,6 +25,10 @@
         <!-- QR Codes -->
         <script type="text/javascript" src="qrcodejs/qrcode.js"></script>
 
+        <!-- WaveDrom: Timing Diagrams-->
+        <script src="http://wavedrom.com/skins/default.js" type="text/javascript"></script>
+        <script src="http://wavedrom.com/wavedrom.min.js" type="text/javascript"></script>
+
         <!-- Manual style tweaks -->
         <style>
             /* Columns */
@@ -78,6 +82,19 @@
             .half-size {
                 font-size: 0.5em !important;
             }
+
+            /* Timing Diagram */
+            .timing-diagram {
+                display: inline-block;
+                width: 100%;
+            }
+
+            .timing-diagram div svg {
+                width: 100%;
+                height: auto;
+                filter: invert(100%);
+            }
+
         </style>
     </head>
     <body>
@@ -134,6 +151,7 @@
                                         <li><a href="#/file_system">File System</a></li>
                                         <li><a href="#/outputs">Outputs</a></li>
                                         <li><a href="#/inputs">Inputs</a></li>
+                                        <li><a href="#/comms">Comms</a></li>
                                         <li><a href="#/interrupts">Interrupts</a></li>
                                     </ul>
                                     <li><a href="#/your_script">Your Script</a></li>
@@ -621,6 +639,174 @@
                         <a href="https://github.com/fragmuffin/howto-micropython/tree/master/examples/inputs/analog" class="prj-link">examples/inputs/analog</a>
                     </section>
 
+                </section>
+
+                <!-- =================== COMMUNICATION =================== -->
+                <section id="comms">
+                    <section data-background="#28306a">
+                        <h1>Comms</h1>
+                        Communication<br/>protocols
+                    </section>
+
+                    <section>
+                        <h2>UART</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            from pyb import UART
+
+                            uart = UART(1)
+                            uart.init(baudrate=9600)
+
+                            uart.write(b'abc')   # send 3 bytes
+                            data = uart.read(3)  # receive 3 bytes
+
+                            uart.deinit()
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Virtual COM Port</h2>
+                        <ul>
+                            <li>UART over USB</li>
+                            <li>No wiring necessary</li>
+                            <li>baudrate can be set much higher<br/>than standard UART</li>
+                        </ul>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            from pyb import USB_VCP
+                            vcp = USB_VCP()
+
+                            vcp.write(b'abc')   # write 3 bytes
+                            data = vcp.recv(3)  # receive 3 bytes
+                        </code></pre>
+                        <aside data-markdown class="notes">
+                            ### Setting baudrate?
+                            Baurdrate is set on the PC side
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>I²C</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            from pyb import I2C
+
+                            i2c = I2C(1)                         # create on bus 1
+                            i2c = I2C(1, I2C.MASTER)             # create as a master
+                            i2c.init(I2C.MASTER, baudrate=20000) # init as a master
+                            i2c.init(I2C.SLAVE, addr=0x42)       # init as a slave
+
+                            i2c.send(b'abc')     # send 3 bytes
+                            i2c.send(0x42)       # send a single byte
+                            data = i2c.recv(3)   # receive 3 bytes
+
+                            i2c.deinit()  # turn off the peripheral
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Controller Area Network (CAN)</h3>
+                        <ul>
+                            <li>Used in all modern cars</li>
+                            <li>Excellent immunity to noise</li>
+                            <li>Large distances: 40m, even up to 1km</li>
+                            <li>pyboard has 2 CAN controllers</li>
+                            <li>Requires a tranceiver (probably: <a href="https://www.microchip.com/wwwproducts/en/MCP2562"><code>MCP2562</code></a>)</li>
+                        </ul>
+                        <aside data-markdown class="notes">
+                            ### Transmission Distances
+
+                            Distance depends on the baud rate:
+                            - 1Mb: 40m
+                            - 500Kb: 100m
+                            - 100Kb: 500m
+                            - 50Kb: 1km
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>CAN: Wiring Diagram</h2>
+                        <img class="plain" src="images/circuits/can1.png" />
+                    </section>
+                    <section>
+                        <h2>CAN: Bit timing</h2>
+                        <p>
+                            1-bit
+                            <div class="timing-diagram"><script type="WaveDrom">
+                                {
+                                    signal: [
+                                        {name: '', wave: '01....0', node: '.ab.c.d.'},
+                                        //{name: 'timing', wave: '023.4.0', data: ['1', 'bs1', 'bs2']},
+                                    ],
+                                    config: {hscale: 1},
+                                    edge: [
+                                        'a<->b 1',
+                                        'b<->c bs1',
+                                        'c<->d bs2',
+                                    ],
+                                }
+                            </script></div>
+                        </p>
+                        <p>$prescaler = \frac{pclk1}{baud \times (1+bs1+bs2)}$</p>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import pyb
+
+                            baud = 250000  # baudrate to 25k
+                            pclk1 = pyb.freq()[2]  # = 42000000
+                            (bs1, bs2) = (5, 8)  # arbitrarily chosen
+                            prescaler = int(pclk1 / (baud * (1 + bs1 + bs2)))
+                        </code></pre>
+                        <p>
+                            More on <a href="https://docs.micropython.org/en/latest/pyboard/library/pyb.CAN.html#pyb.CAN.init">bit timing</a>
+                            and <a href="https://docs.micropython.org/en/latest/pyboard/library/pyb.html#pyb.freq">frequencies</a>
+                        </p>
+                        <aside data-markdown class="notes">
+                            The pyboard's inbuilt CAN controller splits bits into
+                            into time _quanta_ such that:
+
+                            ```
+                            1 / baud = quantum * (1 + bs1 + bs2)
+                            quantum = prescaler / pclk1
+                            ```
+
+                            **IMPORTANT**
+
+                            `prescaler` must equate to an integer to match the
+                            configured `baud`; `int()` rounding down will
+                            change effective baudrate.
+
+                            The shown `bs1` and `bs2` values will work for
+                            the most common baudrates: 125k, 250k, 500k, 1M
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>CAN: Transmit</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import pyb
+
+                            # Initialize CAN controller
+                            can1 = pyb.CAN(
+                                1, pyb.CAN.NORMAL, extframe=False,
+                                # timing values from previous slide
+                                prescaler=prescaler, bs1=bs1, bs2=bs2,
+                            )
+
+                            # Transmit
+                            can1.send(b'abc', 0x100)
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>CAN: Receive</h2>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            # Set explicit ID filter for IDs 0x100 - 0x103
+                            can1.setfilter(
+                                0, pyb.CAN.LIST16, 0, (0x100, 0x101 0x102, 0x103)
+                            )
+
+                            msg = can1.recv(0)
+                            (msg_id, rtr, filter_index, data) = msg
+                        </code></pre>
+                        <p>
+                            More on <a href="https://docs.micropython.org/en/latest/pyboard/library/pyb.CAN.html#pyb.CAN.setfilter">filtering</a>
+                            and <a href="https://docs.micropython.org/en/latest/pyboard/library/pyb.CAN.html#pyb.CAN.rxcallback">callbacks</a>
+                        </p>
+                    </section>
                 </section>
 
                 <!-- =================== INTERRUPTS =================== -->
@@ -1165,6 +1351,10 @@
             }
         </script>
 
+        <script>
+            WaveDrom.ProcessAll();
+        </script>
+
         <script src="lib/js/head.min.js"></script>
         <script src="js/reveal.js"></script>
 
@@ -1184,7 +1374,8 @@
                     { src: 'plugin/markdown/markdown.js' },
                     { src: 'plugin/notes/notes.js', async: true },
                     { src: 'plugin/zoom-js/zoom.js', async: true },
-                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/math/math.js', async: true }
                 ]
             });
         </script>
