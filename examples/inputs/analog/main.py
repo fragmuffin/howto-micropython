@@ -1,5 +1,5 @@
 import machine
-import time
+import utime as time
 import pyb
 
 pin = machine.Pin('X19')

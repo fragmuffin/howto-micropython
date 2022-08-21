@@ -143,7 +143,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <ul style="font-size:0.9em">
+                                <ul style="font-size:0.75em">
                                     <li><a href="#/what_is_micropython">What is MicroPython?</a></li>
                                     <li><a href="#/hardware">Hardware</a></li>
                                     <li><a href="#/getting_started">Getting Started</a></li>
@@ -156,6 +156,7 @@
                                     </ul>
                                     <li><a href="#/your_script">Your Script</a></li>
                                     <li><a href="#/debugging">Debugging</a></li>
+                                    <li><a href="#/async">Asyncio</a></li>
                                     <li><a href="#/lcd_interface">LCD Interface</a></li>
                                 </ul>
                             </div>
@@ -178,8 +179,13 @@
                             environments.&rdquo;
                         </blockquote>
                     </section>
-                </section>
 
+                    <section>
+                        <h3>Compiler vs Interpreter</h3>
+                        <img class="plain" src="images/compiler-vs-interpreter.png" />
+                    </section>
+
+                </section>
 
                 <!-- =================== HARDWARE =================== -->
                 <section id="hardware">
@@ -188,97 +194,22 @@
                     </section>
 
                     <section>
+                        <h2>Supported Devices</h2>
                         <div class="columns">
                             <div class="col">
-                                <h3>pyboard</h3>
-                                <img class="plain" src="images/pyboard/v1.1_diag.png" />
+                                <a href="https://micropython.org/download/">
+                                    <img class="plain" src="images/hardware/supported-devices.png" />
+                                </a>
                             </div>
                             <div class="col">
-                                <h3>WiPy</h3>
-                                <img class="plain" src="images/wipy/side.png" />
+                                <br/>
+                                <h4>Many, and Growing:</h4>
+                                <p>
+                                    Each have thier own advantages.<br/>
+                                    To learn more visit the <a href="https://micropython.org/download/">download</a> page.
+                                </p>
                             </div>
                         </div>
-                    </section>
-
-                    <section>
-                        <h2>Peripherals</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th><a href="https://www.adafruit.com/product/2390">pyboard</a></th>
-                                    <th><a href="https://pycom.io/product/wipy/">WiPy</a></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>SD card socket</td>
-                                    <td>Yes</td>
-                                    <td>No*</td>
-                                </tr>
-                                <tr>
-                                    <td>USB socket</td>
-                                    <td>Yes</td>
-                                    <td>No*</td>
-                                </tr>
-                                <tr>
-                                    <td>WiFi built-in</td>
-                                    <td>No</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <td>Accelerometer</td>
-                                    <td>Yes</td>
-                                    <td>No</td>
-                                </tr>
-                                <tr>
-                                    <td>Processor Power</td>
-                                    <td>Less</td>
-                                    <td>More</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div style="font-size:0.7em">
-                            * - available via <a href="https://pycom.io/product/expansion-board-2-0/">expansion board</a>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h2>Micro-Controller</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th><a href="https://www.adafruit.com/product/2390">pyboard</a></th>
-                                    <th><a href="https://pycom.io/product/wipy/">WiPy</a></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Model</td>
-                                    <td><a href="http://www.st.com/en/microcontrollers/stm32f405rg.html">STM32F405RG</a></td>
-                                    <td><a href="http://espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">ESP32</a></td>
-                                </tr>
-                                <tr>
-                                    <td>ROM</td>
-                                    <td>1MB</td>
-                                    <td>4MB</td>
-                                </tr>
-                                <tr>
-                                    <td>RAM</td>
-                                    <td>192kB</td>
-                                    <td>512kB</td>
-                                </tr>
-                                <tr>
-                                    <td>Cores</td>
-                                    <td>1</td>
-                                    <td>2*</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <ul>
-                            <li>1 core dedicated to networking</li>
-                        </ul>
                     </section>
 
                     <section>
@@ -286,27 +217,23 @@
                         <div class="fragment_ fade-in">
                             <div class="columns">
                                 <div class="col">
+                                    <br/>
+                                    <h3>pyboard v1.1</h3>
                                     <p>
                                         For the rest of this presentation I'll be
                                         using the <code>pyboard</code> v1.1.
                                     </p>
-                                    <p>
-                                        Note: there's more than just the pyboard
-                                        and WiPy out there. Anything with
-                                        a processor <a href="https://micropython.org/download">listed here</a>
-                                    </p>
                                 </div>
                                 <div class="col">
-                                    <h3>pyboard v1.1</h3>
-                                    <img class="plain" width="70%" src="images/pyboard/v1.0_top.png" />
+                                    <img class="plain" width="70%" src="images/hardware/pyboard/v1.0_top.png" />
                                 </div>
                             </div>
                         </div>
                     </section>
 
                     <section>
-                        <a href="images/pyboard/v1.1_pinout.jpg">
-                            <img class="plain" src="images/pyboard/v1.1_pinout.jpg" />
+                        <a href="images/hardware/pyboard/v1.1_pinout.jpg">
+                            <img class="plain" src="images/hardware/pyboard/v1.1_pinout.jpg" />
                         </a>
                     </section>
 
@@ -356,7 +283,7 @@
                             Connected.
                             MicroPython v1.9.2 on 2017-08-23; PYBv1.1 with STM32F405RG
                             Type "help()" for more information.
-                            >>> import os
+                            >>> import uos as os
                             >>> os.uname().version
                             'v1.9.2 on 2017-08-23'
                         </code></pre>
@@ -391,7 +318,7 @@
                     <section>
                         <h2>Browse with Python</h2>
                         <pre><code class="hljs" data-trim contenteditable>
-                            >>> import os
+                            >>> import uos as os
                             >>> os.listdir('/')
                             ['flash', 'sd']
                             >>> os.getcwd()
@@ -405,7 +332,7 @@
                         <h2>Hot mount SD Card</h2>
                         The SD card can be mounted after boot.
                         <pre><code class="hljs" data-trim contenteditable>
-                            >>> import os, pyb
+                            >>> import uos as os, pyb
                             >>> os.umount('/sd')
                             >>> os.listdir('/')
                             ['flash']
@@ -419,7 +346,7 @@
                         <h2>Hot mount SD Card</h2>
                         Raises <code>OSError</code> on failure...
                         <pre><code class="hljs" data-trim contenteditable>
-                            import os, pyb
+                            import uos as os, pyb
                             try:
                                 os.mount(pyb.SD, '/sd')
                                 print("Successfully mounted SD card")
@@ -534,7 +461,7 @@
 
                             pin = machine.Pin('LED_BLUE')
                             timer = pyb.Timer(3, freq=1000)
-                            channel = tim.channel(1, pyb.Timer.PWM, pin=pin)
+                            channel = timer.channel(1, pyb.Timer.PWM, pin=pin)
 
                             # Change blue LED's intensity manually
                             channel.pulse_width_percent(5)
@@ -622,7 +549,7 @@
                             <div class="col">
                                 <pre><code class="hljs" data-trim contenteditable>
                                     import machine
-                                    import time
+                                    import utime as time
                                     import pyb
 
                                     pin = machine.Pin('X19')
@@ -922,7 +849,7 @@
                         <h2>Import Path</h2>
                         Defaults are...
                         <pre><code class="hljs" data-trim contenteditable>
-                            >>> import sys
+                            >>> import usys as sys
                             >>> sys.path
                             ['', '/sd', '/sd/lib', '/flash', '/flash/lib']
                         </code></pre>
@@ -1042,6 +969,64 @@
                     </section>
                 </section>
 
+                <!-- =================== ASYNCIO =================== -->
+                <section id="async">
+                    <section data-background="#28306a">
+                        <h1>Asyncio</h1>
+                    </section>
+
+                    <section>
+                        <h2>Multitasking</h2>
+                        <p>
+                            For example...
+                            <ul>
+                                <li>Toggle <span class="text-red">red</span> LED every 1000 ms</li>
+                                <li>Toggle <span class="text-green">green</span> LED every 450 ms</li>
+                            </ul>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3>The confusing way</h3>
+                        Without using <code>asyncio</code>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import utime as time
+                            from machine import Pin
+                            
+                            led1, t1 = Pin('LED_RED', Pin.OUT), time.ticks_ms()
+                            led2, t2 = Pin('LED_GREEN', Pin.OUT), time.ticks_ms()
+                            while True:
+                                if time.ticks_diff(time.ticks_ms(), t1) >= 1000:
+                                    t1 = time.ticks_ms()
+                                    led1.value(1 - led1.value())
+                                if time.ticks_diff(time.ticks_ms(), t2) >= 450:
+                                    t2 = time.ticks_ms()
+                                    led2.value(1 - led2.value())
+                                time.sleep_ms(10)
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>The asynchronous way</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import uasyncio as asyncio
+                            from machine import Pin
+                            
+                            async def blink(led, period):
+                                """Toggle LED once each period"""
+                                while True:
+                                    await asyncio.sleep_ms(period)
+                                    led.value(1 - led.value())
+                            
+                            # Create loop, add tasks, and run
+                            loop = asyncio.get_event_loop()
+                            loop.create_task(blink(Pin('LED_RED', Pin.OUT), 1000))
+                            loop.create_task(blink(Pin('LED_GREEN', Pin.OUT), 450))
+                            loop.run_forever()
+                        </code></pre>
+                    </section>
+                </section>
+
                 <!-- =================== LCD INTERFACE =================== -->
                 <section id="lcd_interface">
                     <section data-background="#28306a">
@@ -1073,7 +1058,7 @@
                         pyboard Right &nbsp; &gt;&gt; &nbsp; LCD Left
                         <div class="columns">
                             <div class="col">
-                                <img class="plain" src="images/pyboard/v1.0_top.png" />
+                                <img class="plain" src="images/hardware/pyboard/v1.0_top.png" />
                             </div>
                             <div class="col">
                                 <img class="plain" src="images/lcd/top.png" />
@@ -1351,6 +1336,7 @@
             }
         </script>
 
+        <!-- Timing Diagram(s) -->
         <script>
             WaveDrom.ProcessAll();
         </script>

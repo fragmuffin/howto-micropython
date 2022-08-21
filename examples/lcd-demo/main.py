@@ -1,8 +1,8 @@
-import os
+import uos as os
 import lcd160cr
 import lcd160cr_test
 import pyb
-import time
+import utime as time
 
 import widgets
 from colors import *
