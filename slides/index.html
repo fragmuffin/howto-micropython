@@ -963,6 +963,64 @@
                     </section>
                 </section>
 
+                <!-- =================== ASYNCIO =================== -->
+                <section id="debugging">
+                    <section data-background="#28306a">
+                        <h1>Asyncio</h1>
+                    </section>
+
+                    <section>
+                        <h2>Multitasking</h2>
+                        <p>
+                            For example...
+                            <ul>
+                                <li>Toggle red LED every 1000 ms</li>
+                                <li>Toggle green LED every 450 ms</li>
+                            </ul>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3>The confusing way</h3>
+                        Without using <code>asyncio</code>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import utime as time
+                            from machine import Pin
+                            
+                            led1, t1 = Pin('LED_RED', Pin.OUT), time.ticks_ms()
+                            led2, t2 = Pin('LED_GREEN', Pin.OUT), time.ticks_ms()
+                            while True:
+                                if time.ticks_diff(time.ticks_ms(), t1) >= 1000:
+                                    t1 = time.ticks_ms()
+                                    led1.value(1 - led1.value())
+                                if time.ticks_diff(time.ticks_ms(), t2) >= 450:
+                                    t2 = time.ticks_ms()
+                                    led2.value(1 - led2.value())
+                                time.sleep_ms(10)
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>The asynchronous way</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+                            import uasyncio as asyncio
+                            from machine import Pin
+                            
+                            async def blink(led, period):
+                                """Toggle LED once each period"""
+                                while True:
+                                    await asyncio.sleep_ms(period)
+                                    led.value(1 - led.value())
+                            
+                            # Create loop, add tasks, and run
+                            loop = asyncio.get_event_loop()
+                            loop.create_task(blink(Pin('LED_RED', Pin.OUT), 1000))
+                            loop.create_task(blink(Pin('LED_GREEN', Pin.OUT), 450))
+                            loop.run_forever()
+                        </code></pre>
+                    </section>
+                </section>
+
                 <!-- =================== LCD INTERFACE =================== -->
                 <section id="lcd_interface">
                     <section data-background="#28306a">
