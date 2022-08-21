@@ -1,5 +1,5 @@
 import pyb
-import time
+import utime as time
 
 # Setup timing to achieve target baud-rate
 baud = 250000  # 25k
